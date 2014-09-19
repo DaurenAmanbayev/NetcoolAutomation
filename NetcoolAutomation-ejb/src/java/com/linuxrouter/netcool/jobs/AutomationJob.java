@@ -67,11 +67,11 @@ public abstract class AutomationJob implements Job {
         try {
             con.close();
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(AutomationJob.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Fail to close omnibus connection",ex);
         }
 
         Long endTime = System.currentTimeMillis();
-        logger.debug("Done Script:" + this.jobName + " Time Took: " + (endTime - startTime) + " ms");
+        logger.debug("Done All Script:" + this.jobName + " Time Took: " + (endTime - startTime) + " ms");
     }
 
     /**
