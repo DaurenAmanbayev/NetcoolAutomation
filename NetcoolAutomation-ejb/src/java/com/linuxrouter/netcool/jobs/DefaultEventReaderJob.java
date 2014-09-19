@@ -5,21 +5,16 @@
  */
 package com.linuxrouter.netcool.jobs;
 
-import com.google.common.base.Joiner;
 import com.linuxrouter.netcool.client.EventMap;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
-import groovy.util.ObservableMap;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.DisallowConcurrentExecution;
 
 /**
- *
+ * This is the default event reader.
  * @author lucas
  */
 @DisallowConcurrentExecution
@@ -42,7 +37,7 @@ public class DefaultEventReaderJob extends AutomationJob {
         binding.setVariable("events", events);
         try {
             Long startTime = System.currentTimeMillis();
-            GroovyShell shell = new GroovyShell(binding);
+            GroovyShell shell = new GroovyShell(binding);            
             shell.evaluate("for (x in events){"
                     + " if (x.Summary =~/CTA/){"
                     + "   "
