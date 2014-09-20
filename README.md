@@ -64,6 +64,9 @@ Since I´m using an ObservableHashMap note that the commitChangedEvents method w
 that were changed inside the groovy shell. The untouched events will not be commited and for the changed events only the changed fields will be update
 the others will ne untouched.
 
+Running this code in a desktop server took 9000ms to execute.
+
+
 
 ## Target Feattures
 * SnmpGetRequest for simple host,community,oid
@@ -73,3 +76,4 @@ the others will ne untouched.
 * Integration with user created java classes,program,s etc...
 
 
+## Deploying the server...
