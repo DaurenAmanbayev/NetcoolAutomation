@@ -17,8 +17,7 @@ public class ScriptJob extends AutomationJob{
     @Override
     public void executeContext(Connection con) {
         GroovyShell shell = new GroovyShell();
-        shell.evaluate("println 'Oi xD'");
-        
+        shell.evaluate("println 'Oi xD'");        
     }
     
 }

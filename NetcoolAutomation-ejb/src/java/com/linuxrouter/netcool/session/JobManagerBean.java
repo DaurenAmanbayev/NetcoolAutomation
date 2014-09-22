@@ -38,7 +38,7 @@ public class JobManagerBean {
         map.put(AutomationConstants.JOBNAME, "Default");
         map.put(AutomationConstants.DBPOOL,omniclient.getOmniBusDataSource());
         map.put(AutomationConstants.OMNICLIENT,omniclient);
-        JobDetail det = JobManager.commitNewJob("EventReader", "*/30 * * * * ?", DefaultEventReaderJob.class, map);
+        //JobDetail det = JobManager.commitNewJob("EventReader", "*/30 * * * * ?", DefaultEventReaderJob.class, map);
     }
     
     @PreDestroy
