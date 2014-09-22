@@ -809,6 +809,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.slf4j-log4j12-1.6.6.jar}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.groovy-all-2.3.6.jar}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.guava-18.0.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.gson-2.3.jar}" todir="${build.classes.dir}"/>
     </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
         <basename file="${file.reference.commons-codec-1.6.jar}" property="manifest.file.reference.commons-codec-1.6.jar"/>
@@ -827,8 +828,9 @@ exists or setup the property manually. For example like this:
         <basename file="${file.reference.slf4j-log4j12-1.6.6.jar}" property="manifest.file.reference.slf4j-log4j12-1.6.6.jar"/>
         <basename file="${file.reference.groovy-all-2.3.6.jar}" property="manifest.file.reference.groovy-all-2.3.6.jar"/>
         <basename file="${file.reference.guava-18.0.jar}" property="manifest.file.reference.guava-18.0.jar"/>
+        <basename file="${file.reference.gson-2.3.jar}" property="manifest.file.reference.gson-2.3.jar"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 jar-6 jar-7 jar-8 jar-9 jar-10 jar-11 jar-12 jar-13 jar-14 jar-15 jar-16 "/>
+            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 jar-6 jar-7 jar-8 jar-9 jar-10 jar-11 jar-12 jar-13 jar-14 jar-15 jar-16 jar-17 "/>
             <attribute name="jar-1-Extension-Name" value="${manifest.file.reference.commons-codec-1.6.jar}"/>
             <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.commons-configuration-1.9.jar}"/>
             <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.commons-dbcp2-2.0.1.jar}"/>
@@ -845,6 +847,7 @@ exists or setup the property manually. For example like this:
             <attribute name="jar-14-Extension-Name" value="${manifest.file.reference.slf4j-log4j12-1.6.6.jar}"/>
             <attribute name="jar-15-Extension-Name" value="${manifest.file.reference.groovy-all-2.3.6.jar}"/>
             <attribute name="jar-16-Extension-Name" value="${manifest.file.reference.guava-18.0.jar}"/>
+            <attribute name="jar-17-Extension-Name" value="${manifest.file.reference.gson-2.3.jar}"/>
         </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
@@ -864,6 +867,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.slf4j-log4j12-1.6.6.jar}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.groovy-all-2.3.6.jar}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.guava-18.0.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.gson-2.3.jar}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">

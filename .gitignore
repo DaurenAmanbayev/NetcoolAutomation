@@ -1,1 +1,6 @@
 /NetcoolAutomation-ejb/libs/
+/nbproject/private/
+/NetcoolAutomationAdmin/nbproject/private/
+/NetcoolAutomation-ejb/nbproject/private/
+/NetcoolAutomation-ejb/build/
+/NetcoolAutomation-ejb/setup/
