@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "AutomationConnection.findAll", query = "SELECT a FROM AutomationConnection a"),
     @NamedQuery(name = "AutomationConnection.findByConnectionName", query = "SELECT a FROM AutomationConnection a WHERE a.connectionName = :connectionName"),
-    @NamedQuery(name = "AutomationConnection.findByUsernamer", query = "SELECT a FROM AutomationConnection a WHERE a.usernamer = :usernamer"),
+    @NamedQuery(name = "AutomationConnection.findByUsername", query = "SELECT a FROM AutomationConnection a WHERE a.username = :username"),
     @NamedQuery(name = "AutomationConnection.findByPassword", query = "SELECT a FROM AutomationConnection a WHERE a.password = :password"),
     @NamedQuery(name = "AutomationConnection.findByJdbcUrl", query = "SELECT a FROM AutomationConnection a WHERE a.jdbcUrl = :jdbcUrl"),
     @NamedQuery(name = "AutomationConnection.findByEnabled", query = "SELECT a FROM AutomationConnection a WHERE a.enabled = :enabled")})
@@ -44,8 +44,8 @@ public class AutomationConnection implements Serializable {
     @Column(name = "CONNECTION_NAME")
     private String connectionName;
     @Size(max = 50)
-    @Column(name = "USERNAMER")
-    private String usernamer;
+    @Column(name = "USERNAME")
+    private String username;
     @Size(max = 255)
     @Column(name = "PASSWORD")
     private String password;
@@ -53,7 +53,7 @@ public class AutomationConnection implements Serializable {
     @Column(name = "JDBC_URL")
     private String jdbcUrl;
     @Column(name = "ENABLED")
-    private Character enabled;
+    private String enabled;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "connectionName")
     private List<AutomationReader> automationReaderList;
 
@@ -72,12 +72,12 @@ public class AutomationConnection implements Serializable {
         this.connectionName = connectionName;
     }
 
-    public String getUsernamer() {
-        return usernamer;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUsernamer(String usernamer) {
-        this.usernamer = usernamer;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -96,11 +96,11 @@ public class AutomationConnection implements Serializable {
         this.jdbcUrl = jdbcUrl;
     }
 
-    public Character getEnabled() {
+    public String getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Character enabled) {
+    public void setEnabled(String enabled) {
         this.enabled = enabled;
     }
 

@@ -53,9 +53,9 @@ public class AutomationReader implements Serializable {
     @Column(name = "READER_SQL")
     private String readerSql;
     @Column(name = "ENABLED")
-    private Character enabled;
+    private String enabled;
     @Column(name = "LOGGING")
-    private Character logging;
+    private String logging;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")
     private List<AutomationPolicies> automationPoliciesList;
     @JoinColumn(name = "LOGIN", referencedColumnName = "LOGIN")
@@ -98,19 +98,19 @@ public class AutomationReader implements Serializable {
         this.readerSql = readerSql;
     }
 
-    public Character getEnabled() {
+    public String getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Character enabled) {
+    public void setEnabled(String enabled) {
         this.enabled = enabled;
     }
 
-    public Character getLogging() {
+    public String getLogging() {
         return logging;
     }
 
-    public void setLogging(Character logging) {
+    public void setLogging(String logging) {
         this.logging = logging;
     }
 

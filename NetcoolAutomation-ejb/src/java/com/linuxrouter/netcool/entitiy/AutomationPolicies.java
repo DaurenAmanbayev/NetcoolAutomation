@@ -55,7 +55,7 @@ public class AutomationPolicies implements Serializable {
     @Column(name = "EXECUTION_ORDER")
     private Integer executionOrder;
     @Column(name = "LOGGING")
-    private Character logging;
+    private String logging;
     @JoinColumn(name = "READER_NAME", referencedColumnName = "READER_NAME")
     @ManyToOne(optional = false)
     private AutomationReader readerName;
@@ -101,11 +101,11 @@ public class AutomationPolicies implements Serializable {
         this.executionOrder = executionOrder;
     }
 
-    public Character getLogging() {
+    public String getLogging() {
         return logging;
     }
 
-    public void setLogging(Character logging) {
+    public void setLogging(String logging) {
         this.logging = logging;
     }
 

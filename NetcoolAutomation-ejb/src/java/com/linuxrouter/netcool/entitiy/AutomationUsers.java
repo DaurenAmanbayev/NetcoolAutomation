@@ -54,7 +54,7 @@ public class AutomationUsers implements Serializable {
     @Column(name = "EMAIL")
     private String email;
     @Column(name = "ENABLED")
-    private Character enabled;
+    private String enabled;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
     private List<AutomationReader> automationReaderList;
 
@@ -97,11 +97,11 @@ public class AutomationUsers implements Serializable {
         this.email = email;
     }
 
-    public Character getEnabled() {
+    public String getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Character enabled) {
+    public void setEnabled(String enabled) {
         this.enabled = enabled;
     }
 

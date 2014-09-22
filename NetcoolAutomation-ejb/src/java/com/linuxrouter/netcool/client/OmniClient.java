@@ -1,10 +1,10 @@
 package com.linuxrouter.netcool.client;
 
-import groovy.util.ObservableMap;
+import com.linuxrouter.netcool.dao.AutomationDao;
+import com.linuxrouter.netcool.entitiy.AutomationConnection;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -12,11 +12,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 
 import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
@@ -41,53 +43,70 @@ import org.apache.log4j.Logger;
 @LocalBean
 @Startup
 public class OmniClient {
-    
-    private final String dbHost = "192.168.0.201";
-    private final String dbUser = "root";
-    private final String dbPass = "omni12@#";
-    private final String dbName = "alerts";
-    private final String dbPort = "4100";
-    private ObjectPool<PoolableConnection> connectionPool = null;
-    private PoolingDataSource<PoolableConnection> poolingDataSource = null;
+
+    private final HashMap<String, ObjectPool<PoolableConnection>> connectionPool = new HashMap<>();
+    private final HashMap<String, PoolingDataSource<PoolableConnection>> poolingDataSource = new HashMap<>();
     private final Logger logger = Logger.getLogger(OmniClient.class);
-    
-    @PostConstruct
-    public void setupConnectionPool() {
-        logger.debug("Starting Netcool Automation");
+
+    @EJB
+    private AutomationDao automationDao;
+
+//    @PostConstruct
+//    public void setupConnectionPool() {
+//        logger.debug("Starting Netcool Automation");
+//        Driver drv = new com.sybase.jdbc3.jdbc.SybDriver();
+//        try {
+//            DriverManager.registerDriver(drv);
+//        } catch (SQLException ex) {
+//            logger.error("Failed to create an instance of SybDriver...", ex);
+//        }
+//        String url = "jdbc:sybase:Tds:" + getDbHost() + ":" + getDbPort() + "/" + getDbName();
+//        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(url, getDbUser(), getDbPass());
+//        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
+//        setConnectionPool(new GenericObjectPool<>(poolableConnectionFactory));
+//        poolableConnectionFactory.setPool(getConnectionPool());
+//        setPoolingDataSource(new PoolingDataSource<>(getConnectionPool()));
+//
+//    }
+    private void setConnectionPools(String name, String url, String user, String pass) {
+        logger.debug("Starting Netcool Automation Connection Pool");
         Driver drv = new com.sybase.jdbc3.jdbc.SybDriver();
         try {
             DriverManager.registerDriver(drv);
         } catch (SQLException ex) {
             logger.error("Failed to create an instance of SybDriver...", ex);
         }
-        String url = "jdbc:sybase:Tds:" + dbHost + ":" + dbPort + "/" + dbName;
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(url, dbUser, dbPass);
+
+        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(url, user, pass);
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
-        connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
-        poolableConnectionFactory.setPool(connectionPool);
-        poolingDataSource = new PoolingDataSource<>(connectionPool);
-        
+        ObjectPool<PoolableConnection> cp = new GenericObjectPool<>(poolableConnectionFactory);
+        poolableConnectionFactory.setPool(cp);
+        PoolingDataSource<PoolableConnection> pds = new PoolingDataSource<>(cp);
+        poolingDataSource.put(name, pds);
+        connectionPool.put(name, cp);
+        logger.debug("Configured: " + name + " At Omnit bus pool");
     }
-    
+
     @Schedule(minute = "*", hour = "*")
     private void printConnectionPoolUsage() {
-        logger.debug("OMNIBus Connection Active: " + connectionPool.getNumActive() + " Idle: " + connectionPool.getNumIdle());
+        for (String key : poolingDataSource.keySet()) {
+            logger.debug("Omnbus Connection [" + key + "] Active: " + connectionPool.get(key).getNumActive() + " Idle: " + connectionPool.get(key).getNumIdle()
+            );
+        }
     }
-    
+
     @PreDestroy
     public void shutDownConnectionPool() {
         logger.debug("Stopping Netcool Automation");
-        
+
     }
-    
-    public PoolingDataSource<PoolableConnection> getOmniBusDataSource() {
-        return poolingDataSource;
-    }
-    
-    public ArrayList<EventMap> executeQuery(String sql) {
+
+    public ArrayList<EventMap> executeQuery(String sql,String connName) {
         ArrayList<EventMap> list = new ArrayList<>();
+        logger.debug("Executing Query on:" + connName);
         try {
-            Connection omniBusConnection = poolingDataSource.getConnection();
+
+            Connection omniBusConnection = poolingDataSource.get(connName).getConnection();
             Statement st = omniBusConnection.createStatement();
             Long startTime = System.currentTimeMillis();
             ResultSet rs = st.executeQuery(sql);
@@ -98,14 +117,14 @@ public class OmniClient {
                 EventMap data = new EventMap();
                 for (int x = 1; x < md.getColumnCount(); x++) {
                     data.put(md.getColumnName(x), rs.getString(x));
-                    
+
                 }
                 data.addPropertyChangeListener(data);// adiciona depois para não zoar o processo..
                 list.add(data);
             }
-            
+
             rs.close();
-            
+
             st.close();
             omniBusConnection.close();
             Long endTime = System.currentTimeMillis();
@@ -115,22 +134,20 @@ public class OmniClient {
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(OmniClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return list;
     }
-    
-    public void commitChangedEvents(HashMap<String, ArrayList<HashMap<String, Object>>> changedEvents) {
+
+    public void commitChangedEvents(HashMap<String, ArrayList<HashMap<String, Object>>> changedEvents, String connName) {
         Long startTime = System.currentTimeMillis();
         Iterator it = changedEvents.entrySet().iterator();
         try {
-            Connection con = poolingDataSource.getConnection();
+            Connection con = poolingDataSource.get(connName).getConnection();
             Statement st = con.createStatement();
-            
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry) it.next();
                 String serial = (String) pairs.getKey();
                 ArrayList<HashMap<String, Object>> fieldsChanged = changedEvents.get(serial);
-                //logger.debug("Changed Identifier found..:[" + identifier + "] Fields:Size: " + fieldsChanged.size());
                 ArrayList<String> campoValor = new ArrayList<>();
                 for (HashMap<String, Object> h : fieldsChanged) {
                     for (String key : h.keySet()) {
@@ -144,7 +161,7 @@ public class OmniClient {
                         }
                     }
                 }
-                
+
                 String updateSql = "UPDATE alerts.status set " + StringUtils.join(campoValor, ", ") + " where Serial = " + serial + ";";
                 //logger.debug("Query: " + updateSql);
                 st.addBatch(updateSql);
@@ -153,10 +170,31 @@ public class OmniClient {
             st.close();
             con.close();
             Long enTime = System.currentTimeMillis();
-            logger.debug("Commit Changed Events Took: " + (enTime - startTime) + " ms For: " +changedEvents.size()  + " Events" );
+            logger.debug("Commit Changed Events Took: " + (enTime - startTime) + " ms For: " + changedEvents.size() + " Events");
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(OmniClient.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Failed to execute sql", ex);
         }
     }
-    
+
+    @PostConstruct
+    public void configureConnections() {
+        logger.debug("Configuring OMNI Bus Connection...");
+        List<AutomationConnection> connections = automationDao.getEnabledConections();
+        if (connections != null) {
+            logger.debug("Enabled Connection Count: [" + connections.size() + "]");
+            if (connections.size() > 0) {
+                //lets configure the connections pools xD
+                for (AutomationConnection con : connections) {
+                    setConnectionPools(con.getConnectionName(), con.getJdbcUrl(), con.getUsername(), con.getPassword());
+                }
+            }
+        } else {
+            logger.debug("No Connection found...");
+        }
+
+    }
+
+    public PoolingDataSource<PoolableConnection> getPoolingConnectionByName(String name) {
+        return this.poolingDataSource.get(name);
+    }
 }
