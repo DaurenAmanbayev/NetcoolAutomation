@@ -6,27 +6,35 @@
 package com.linuxrouter.netcool.jobs;
 
 import com.linuxrouter.netcool.client.EventMap;
+import com.linuxrouter.netcool.dao.AutomationDao;
 import com.linuxrouter.netcool.entitiy.AutomationPolicies;
+import com.linuxrouter.netcool.entitiy.AutomationReader;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.ejb.EJB;
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author lucas
  */
+
 public class ScriptJob extends AutomationJob {
 
     private final Logger logger = Logger.getLogger(ScriptJob.class);
+
     
+
     @Override
     public void executeContext(Connection con) {
         // Execution Context
+        
+        AutomationReader reader = automationDao.getReaderByName(this.policyName);
 
-        ArrayList<EventMap> events = this.omniClient.executeQuery(this.sqlReader, this.readerConnName);
+        ArrayList<EventMap> events = this.omniClient.executeQuery(reader.getReaderSql(), this.readerConnName);
 
         HashMap<String, ArrayList<HashMap<String, Object>>> changedEvents = new HashMap<>();
         Long beforeMap = System.currentTimeMillis();
@@ -41,13 +49,15 @@ public class ScriptJob extends AutomationJob {
         try {
 
             GroovyShell shell = new GroovyShell(binding);
-            
 
-            for (AutomationPolicies p : policies) {
-                Long startTime = System.currentTimeMillis();
-                shell.evaluate(p.getScript());
-                Long endTime = System.currentTimeMillis();
-                logger.debug("Groovy Script[" + p.getPolicyName() + "] Execution Time: " + (endTime - startTime) + "ms");
+            for (AutomationPolicies p : reader.getAutomationPoliciesList()) {
+
+                if (p.getEnabled().equalsIgnoreCase("Y")) {
+                    Long startTime = System.currentTimeMillis();
+                    shell.evaluate(p.getScript());
+                    Long endTime = System.currentTimeMillis();
+                    logger.debug("Groovy Script[" + p.getPolicyName() + "] Execution Time: " + (endTime - startTime) + "ms");
+                }
             }
 
         } catch (Exception ex) {

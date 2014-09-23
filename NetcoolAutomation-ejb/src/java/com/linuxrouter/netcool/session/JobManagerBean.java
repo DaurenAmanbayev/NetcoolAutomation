@@ -71,11 +71,11 @@ public class JobManagerBean {
         JobDataMap map = new JobDataMap();
         map.put(AutomationConstants.JOBNAME, reader.getReaderName());
         map.put(AutomationConstants.DBPOOL, omniclient.getPoolingConnectionByName(reader.getConnectionName().getConnectionName()));
-        map.put(AutomationConstants.READER_CONNECTION_NAME, reader.getConnectionName().getConnectionName());
-        
+        map.put(AutomationConstants.READER_CONNECTION_NAME, reader.getConnectionName().getConnectionName());        
         map.put(AutomationConstants.OMNICLIENT, omniclient);
         map.put(AutomationConstants.SQL_TEXT, reader.getReaderSql());
         map.put(AutomationConstants.POLICIES, reader.getAutomationPoliciesList());        
+        map.put(AutomationConstants.AUTOMATIONDAO, automationDao);        
         JobDetail det = JobManager.commitNewJob(reader.getReaderName(), reader.getCronInterval(), ScriptJob.class, map);        
         
     }

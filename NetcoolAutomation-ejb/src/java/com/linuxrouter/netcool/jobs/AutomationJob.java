@@ -7,6 +7,7 @@ package com.linuxrouter.netcool.jobs;
 
 import com.linuxrouter.netcool.client.OmniClient;
 import com.linuxrouter.netcool.configuration.AutomationConstants;
+import com.linuxrouter.netcool.dao.AutomationDao;
 import com.linuxrouter.netcool.entitiy.AutomationPolicies;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -43,6 +44,8 @@ public abstract class AutomationJob implements Job {
     protected List<AutomationPolicies> policies = new ArrayList<>();
     protected String readerConnName = "";
 
+    protected AutomationDao automationDao;
+
     /**
      * Executes a Job Context...
      *
@@ -57,6 +60,7 @@ public abstract class AutomationJob implements Job {
         this.sqlReader = (String) jec.getJobDetail().getJobDataMap().get(AutomationConstants.SQL_TEXT);
         this.readerConnName = (String) jec.getJobDetail().getJobDataMap().get(AutomationConstants.READER_CONNECTION_NAME);
         this.policies = (List<AutomationPolicies>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.POLICIES);
+        this.automationDao = (AutomationDao) jec.getJobDetail().getJobDataMap().get(AutomationConstants.AUTOMATIONDAO);
         //this.connectionMap = (HashMap<String, Connection>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.CONNECTION_HASH);
         logger = Logger.getLogger(this.policyName);
         logger.debug("Starting : " + this.policyName);

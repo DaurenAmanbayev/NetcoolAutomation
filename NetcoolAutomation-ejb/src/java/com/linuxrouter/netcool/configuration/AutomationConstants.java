@@ -20,4 +20,5 @@ public class AutomationConstants {
     public static final String SQL_TEXT = "SQL_TEXT";
     public static final String POLICIES = "POLICIES";
     public static final String READER_CONNECTION_NAME = "AFASDSADS";
+    public static final String AUTOMATIONDAO = "automationada";
 }

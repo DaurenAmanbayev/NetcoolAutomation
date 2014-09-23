@@ -78,6 +78,18 @@ public class AutomationDao {
             return null;
         }
     }
+
+    public AutomationPolicies getPolicyByName(String name) {
+        Query q = em.createNamedQuery("AutomationPolicies.findByPolicyName");
+        q.setParameter("policyName", name);
+        AutomationPolicies pol = (AutomationPolicies) q.getSingleResult();
+        return pol;
+    }
     
-    
+    public AutomationReader getReaderByName(String readerName){
+         Query q = em.createNamedQuery("AutomationReader.findByReaderName");
+        q.setParameter("readerName", readerName);        
+        AutomationReader reader = (AutomationReader) q.getSingleResult();
+        return reader;
+    }
 }
