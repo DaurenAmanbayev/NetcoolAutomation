@@ -1,0 +1,24 @@
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="DefaultAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${com.sun.aas.instanceRoot}/logs/Netcool/automation-main.log" />
+        <param name="MaxFileSize" value="10240KB"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%5p] %d{dd-MMM-yyyy HH:mm:ss} (%C) - %m%n"/>
+        </layout>
+    </appender>
+    
+  
+    
+    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%5p] %d{dd-MMM-yyyy HH:mm:ss} (%C) - %m%n"/>
+        </layout>
+    </appender>
+   
+    <root>        
+        <appender-ref ref="DefaultAppender"/>
+        <appender-ref ref="stdout"/>
+    </root>
+</log4j:configuration>

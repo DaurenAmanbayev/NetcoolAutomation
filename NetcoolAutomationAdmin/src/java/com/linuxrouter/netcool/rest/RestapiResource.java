@@ -5,14 +5,19 @@
  */
 package com.linuxrouter.netcool.rest;
 
+import com.linuxrouter.netcool.session.GsonConverter;
+import com.linuxrouter.netcool.session.UserSession;
+import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import org.apache.log4j.Logger;
 
 /**
  * REST Web Service
@@ -22,6 +27,15 @@ import javax.ws.rs.Produces;
 @Path("restapi")
 public class RestapiResource {
 
+    
+    private final Logger logger = Logger.getLogger(RestapiResource.class);
+    
+    @EJB
+    private GsonConverter converter;
+    
+    @EJB
+    private UserSession userSession;
+    
     @Context
     private UriInfo context;
 
@@ -54,4 +68,14 @@ public class RestapiResource {
     @Consumes("application/json")
     public void putJson(String content) {
     }
+    
+    
+    @POST
+    @Produces("application/json")
+    @Path("user/login")
+    public String doLogin(@QueryParam("user") String user,@QueryParam("password") String password){
+        logger.debug("Auth User: " +user +  " With Pass:[********]");
+        return converter.convert2Json(userSession.authUser(user, password));
+    }
+    
 }

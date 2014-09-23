@@ -6,6 +6,7 @@
 package com.linuxrouter.netcool.entitiy;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -56,6 +57,8 @@ public class AutomationReader implements Serializable {
     private String enabled;
     @Column(name = "LOGGING")
     private String logging;
+    @Column(name = "STATE_CHANGE")
+    private Integer stateChanged;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")
     private List<AutomationPolicies> automationPoliciesList;
     @JoinColumn(name = "LOGIN", referencedColumnName = "LOGIN")
@@ -171,6 +174,20 @@ public class AutomationReader implements Serializable {
     @Override
     public String toString() {
         return "com.linuxrouter.netcool.entitiy.AutomationReader[ readerName=" + readerName + " ]";
+    }
+
+    /**
+     * @return the stateChanged
+     */
+    public Integer getStateChanged() {
+        return stateChanged;
+    }
+
+    /**
+     * @param stateChanged the stateChanged to set
+     */
+    public void setStateChanged(Integer stateChanged) {
+        this.stateChanged = stateChanged;
     }
     
 }

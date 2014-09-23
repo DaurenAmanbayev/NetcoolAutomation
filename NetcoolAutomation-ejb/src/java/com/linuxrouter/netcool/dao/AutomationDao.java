@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 @Stateless
 @LocalBean
 public class AutomationDao {
-
+    
     private final Logger logger = Logger.getLogger(AutomationDao.class);
     @PersistenceContext(name = "NetcoolAutomation-ejbPU")
     private EntityManager em;
@@ -55,7 +55,7 @@ public class AutomationDao {
     public void saveUser(AutomationUsers user) {
         em.persist(user);
     }
-
+    
     public List<AutomationReader> getEnabledReaders() {
         Query q = em.createNamedQuery("AutomationReader.findByEnabled");
         q.setParameter("enabled", "Y");
@@ -65,9 +65,9 @@ public class AutomationDao {
         } catch (Exception ex) {
         }
         return list;
-
+        
     }
-
+    
     public List<AutomationConnection> getEnabledConections() {
         Query q = em.createNamedQuery("AutomationConnection.findByEnabled");
         q.setParameter("enabled", "Y");
@@ -78,7 +78,7 @@ public class AutomationDao {
             return null;
         }
     }
-
+    
     public AutomationPolicies getPolicyByName(String name) {
         Query q = em.createNamedQuery("AutomationPolicies.findByPolicyName");
         q.setParameter("policyName", name);
@@ -86,10 +86,18 @@ public class AutomationDao {
         return pol;
     }
     
-    public AutomationReader getReaderByName(String readerName){
-         Query q = em.createNamedQuery("AutomationReader.findByReaderName");
-        q.setParameter("readerName", readerName);        
+    public AutomationReader getReaderByName(String readerName) {
+        Query q = em.createNamedQuery("AutomationReader.findByReaderName");
+        q.setParameter("readerName", readerName);
         AutomationReader reader = (AutomationReader) q.getSingleResult();
         return reader;
+    }
+    
+    public void updatePolicy(AutomationPolicies pol) {
+        em.merge(pol);
+    }
+    
+    public void saveReaderStatus(AutomationReader reader) {
+        em.merge(reader);
     }
 }

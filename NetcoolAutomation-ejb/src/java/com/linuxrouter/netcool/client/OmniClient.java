@@ -2,9 +2,11 @@ package com.linuxrouter.netcool.client;
 
 import com.linuxrouter.netcool.dao.AutomationDao;
 import com.linuxrouter.netcool.entitiy.AutomationConnection;
+import com.linuxrouter.netcool.entitiy.AutomationReader;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -101,13 +103,17 @@ public class OmniClient {
 
     }
 
-    public ArrayList<EventMap> executeQuery(String sql,String connName) {
+    public ArrayList<EventMap> executeQuery(String filter, String connName, AutomationReader reader) {
         ArrayList<EventMap> list = new ArrayList<>();
         logger.debug("Executing Query on:" + connName);
+
+        String sql = "select * from alerts.status where 1=1 and StateChange >  " + reader.getStateChanged() + " and " + filter + " order by StateChange ";
+        logger.debug("SQL:::" + sql);
         try {
 
             Connection omniBusConnection = poolingDataSource.get(connName).getConnection();
             Statement st = omniBusConnection.createStatement();
+
             Long startTime = System.currentTimeMillis();
             ResultSet rs = st.executeQuery(sql);
             Integer resultCount = 0;
@@ -132,7 +138,7 @@ public class OmniClient {
             logger.debug("Query : " + sql);
             logger.debug("Result Count : " + resultCount);
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(OmniClient.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Failed to execute sql", ex);
         }
 
         return list;
@@ -163,7 +169,7 @@ public class OmniClient {
                 }
 
                 String updateSql = "UPDATE alerts.status set " + StringUtils.join(campoValor, ", ") + " where Serial = " + serial + ";";
-                //logger.debug("Query: " + updateSql);
+                logger.debug("Query: " + updateSql);
                 st.addBatch(updateSql);
             }
             st.executeBatch();
