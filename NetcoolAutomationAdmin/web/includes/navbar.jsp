@@ -9,7 +9,9 @@
             <li>
                 <a href="omnibusconnections.jsp"><i class="fa fa-database fa-fw"></i> Omnibus Connections</a>
             </li>
-            
+              <li>
+                <a href="policy-editor.jsp"><i class="fa fa-archive fa-fw"></i> Omnibus Connections</a>
+            </li>
         </ul>
     </div>
     <!-- /.sidebar-collapse -->
