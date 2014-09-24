@@ -7,6 +7,7 @@ package com.linuxrouter.netcool.session;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.linuxrouter.netcool.json.EntitySerializationExclusitionStrategy;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import org.apache.log4j.Logger;
@@ -28,7 +29,11 @@ public class GsonConverter {
      * @return
      */
     public String convert2Json(Object obj) {
-        Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").setPrettyPrinting().create();
+        Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss")
+                .setPrettyPrinting()
+                //.excludeFieldsWithoutExposeAnnotation()
+                .addSerializationExclusionStrategy(new EntitySerializationExclusitionStrategy())
+                .create();
         String response = "";
         response = g.toJson(obj);
         return response;

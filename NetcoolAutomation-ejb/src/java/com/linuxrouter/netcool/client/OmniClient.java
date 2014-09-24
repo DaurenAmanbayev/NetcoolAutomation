@@ -3,6 +3,7 @@ package com.linuxrouter.netcool.client;
 import com.linuxrouter.netcool.dao.AutomationDao;
 import com.linuxrouter.netcool.entitiy.AutomationConnection;
 import com.linuxrouter.netcool.entitiy.AutomationReader;
+import com.linuxrouter.netcool.entitiy.AutomationReaderFilter;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -103,11 +104,11 @@ public class OmniClient {
 
     }
 
-    public ArrayList<EventMap> executeQuery(String filter, String connName, AutomationReader reader) {
+    public ArrayList<EventMap> executeQuery(String filter, String connName, AutomationReaderFilter readerFilter) {
         ArrayList<EventMap> list = new ArrayList<>();
         logger.debug("Executing Query on:" + connName);
 
-        String sql = "select * from alerts.status where 1=1 and StateChange >  " + reader.getStateChanged() + " and " + filter + " order by StateChange ";
+        String sql = "select * from alerts.status where 1=1 and StateChange >  " + readerFilter.getStateChange() + " and " + filter + " order by StateChange ";
         logger.debug("SQL:::" + sql);
         try {
 

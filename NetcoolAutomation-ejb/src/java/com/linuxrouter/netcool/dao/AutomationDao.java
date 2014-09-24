@@ -8,6 +8,7 @@ package com.linuxrouter.netcool.dao;
 import com.linuxrouter.netcool.entitiy.AutomationConnection;
 import com.linuxrouter.netcool.entitiy.AutomationPolicies;
 import com.linuxrouter.netcool.entitiy.AutomationReader;
+import com.linuxrouter.netcool.entitiy.AutomationReaderFilter;
 import com.linuxrouter.netcool.entitiy.AutomationUsers;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -24,7 +25,7 @@ import org.apache.log4j.Logger;
 @Stateless
 @LocalBean
 public class AutomationDao {
-    
+
     private final Logger logger = Logger.getLogger(AutomationDao.class);
     @PersistenceContext(name = "NetcoolAutomation-ejbPU")
     private EntityManager em;
@@ -55,7 +56,7 @@ public class AutomationDao {
     public void saveUser(AutomationUsers user) {
         em.persist(user);
     }
-    
+
     public List<AutomationReader> getEnabledReaders() {
         Query q = em.createNamedQuery("AutomationReader.findByEnabled");
         q.setParameter("enabled", "Y");
@@ -65,9 +66,21 @@ public class AutomationDao {
         } catch (Exception ex) {
         }
         return list;
-        
+
     }
-    
+
+    public List<AutomationReader> getAllReaders() {
+        Query q = em.createNamedQuery("AutomationReader.findAll");
+
+        List<AutomationReader> list = null;
+        try {
+            list = q.getResultList();
+        } catch (Exception ex) {
+        }
+        return list;
+
+    }
+
     public List<AutomationConnection> getEnabledConections() {
         Query q = em.createNamedQuery("AutomationConnection.findByEnabled");
         q.setParameter("enabled", "Y");
@@ -78,26 +91,30 @@ public class AutomationDao {
             return null;
         }
     }
-    
+
     public AutomationPolicies getPolicyByName(String name) {
         Query q = em.createNamedQuery("AutomationPolicies.findByPolicyName");
         q.setParameter("policyName", name);
         AutomationPolicies pol = (AutomationPolicies) q.getSingleResult();
         return pol;
     }
-    
+
     public AutomationReader getReaderByName(String readerName) {
         Query q = em.createNamedQuery("AutomationReader.findByReaderName");
         q.setParameter("readerName", readerName);
         AutomationReader reader = (AutomationReader) q.getSingleResult();
         return reader;
     }
-    
+
     public void updatePolicy(AutomationPolicies pol) {
         em.merge(pol);
     }
-    
+
     public void saveReaderStatus(AutomationReader reader) {
         em.merge(reader);
+    }
+
+    public void saveFilterStatus(AutomationReaderFilter filter) {
+        em.merge(filter);
     }
 }

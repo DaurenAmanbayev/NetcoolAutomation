@@ -39,9 +39,9 @@ public abstract class AutomationJob implements Job {
     protected HashMap<String, Connection> connectionMap = null;
     protected Logger logger = null;
     protected OmniClient omniClient = null;
-    protected String sqlReader = "";
+   
     protected String groovyScript = "";
-    protected List<AutomationPolicies> policies = new ArrayList<>();
+   
     protected String readerConnName = "";
 
     protected AutomationDao automationDao;
@@ -57,9 +57,9 @@ public abstract class AutomationJob implements Job {
         this.policyName = jec.getJobDetail().getJobDataMap().getString(AutomationConstants.JOBNAME);
         this.omniBusConnection = (PoolingDataSource<PoolableConnection>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.DBPOOL);
         this.omniClient = (OmniClient) jec.getJobDetail().getJobDataMap().get(AutomationConstants.OMNICLIENT);
-        this.sqlReader = (String) jec.getJobDetail().getJobDataMap().get(AutomationConstants.SQL_TEXT);
+       
         this.readerConnName = (String) jec.getJobDetail().getJobDataMap().get(AutomationConstants.READER_CONNECTION_NAME);
-        this.policies = (List<AutomationPolicies>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.POLICIES);
+      
         this.automationDao = (AutomationDao) jec.getJobDetail().getJobDataMap().get(AutomationConstants.AUTOMATIONDAO);
         //this.connectionMap = (HashMap<String, Connection>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.CONNECTION_HASH);
         logger = Logger.getLogger(this.policyName);
@@ -88,7 +88,7 @@ public abstract class AutomationJob implements Job {
         logger.debug("Done All Script:" + this.policyName + " Time Took: " + (endTime - startTime) + " ms");
     }
 
-    /**
+    /** 
      * Has the implementation from the class
      */
     public abstract void executeContext(Connection con);

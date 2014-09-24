@@ -5,6 +5,7 @@
  */
 package com.linuxrouter.netcool.entitiy;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -49,13 +50,14 @@ public class AutomationUsers implements Serializable {
     @Size(max = 255)
     @Column(name = "PASSWORD")
     private String password;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 255)
     @Column(name = "EMAIL")
     private String email;
     @Column(name = "ENABLED")
     private String enabled;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    @Expose(serialize = false)
     private List<AutomationReader> automationReaderList;
 
     public AutomationUsers() {

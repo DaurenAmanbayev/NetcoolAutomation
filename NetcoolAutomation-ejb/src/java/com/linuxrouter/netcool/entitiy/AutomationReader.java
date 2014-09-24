@@ -5,8 +5,8 @@
  */
 package com.linuxrouter.netcool.entitiy;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -14,7 +14,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -37,8 +36,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AutomationReader.findByReaderName", query = "SELECT a FROM AutomationReader a WHERE a.readerName = :readerName"),
     @NamedQuery(name = "AutomationReader.findByCronInterval", query = "SELECT a FROM AutomationReader a WHERE a.cronInterval = :cronInterval"),
     @NamedQuery(name = "AutomationReader.findByEnabled", query = "SELECT a FROM AutomationReader a WHERE a.enabled = :enabled"),
-    @NamedQuery(name = "AutomationReader.findByLogging", query = "SELECT a FROM AutomationReader a WHERE a.logging = :logging")})
+    @NamedQuery(name = "AutomationReader.findByLogging", query = "SELECT a FROM AutomationReader a WHERE a.logging = :logging"),})
 public class AutomationReader implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -49,25 +49,24 @@ public class AutomationReader implements Serializable {
     @Size(max = 20)
     @Column(name = "CRON_INTERVAL")
     private String cronInterval;
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "READER_SQL")
-    private String readerSql;
     @Column(name = "ENABLED")
     private String enabled;
     @Column(name = "LOGGING")
     private String logging;
-    @Column(name = "STATE_CHANGE")
-    private Integer stateChanged;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")
-    private List<AutomationPolicies> automationPoliciesList;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")   
+    private List<AutomationReaderFilter> automationReaderFilterList;
+
     @JoinColumn(name = "LOGIN", referencedColumnName = "LOGIN")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false)   
     private AutomationUsers login;
+
     @JoinColumn(name = "CONNECTION_NAME", referencedColumnName = "CONNECTION_NAME")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false)   
     private AutomationConnection connectionName;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")
+
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")   
     private List<ReaderHistory> readerHistoryList;
 
     public AutomationReader() {
@@ -93,14 +92,6 @@ public class AutomationReader implements Serializable {
         this.cronInterval = cronInterval;
     }
 
-    public String getReaderSql() {
-        return readerSql;
-    }
-
-    public void setReaderSql(String readerSql) {
-        this.readerSql = readerSql;
-    }
-
     public String getEnabled() {
         return enabled;
     }
@@ -118,12 +109,12 @@ public class AutomationReader implements Serializable {
     }
 
     @XmlTransient
-    public List<AutomationPolicies> getAutomationPoliciesList() {
-        return automationPoliciesList;
+    public List<AutomationReaderFilter> getAutomationReaderFilterList() {
+        return automationReaderFilterList;
     }
 
-    public void setAutomationPoliciesList(List<AutomationPolicies> automationPoliciesList) {
-        this.automationPoliciesList = automationPoliciesList;
+    public void setAutomationReaderFilterList(List<AutomationReaderFilter> automationReaderFilterList) {
+        this.automationReaderFilterList = automationReaderFilterList;
     }
 
     public AutomationUsers getLogin() {
@@ -176,18 +167,4 @@ public class AutomationReader implements Serializable {
         return "com.linuxrouter.netcool.entitiy.AutomationReader[ readerName=" + readerName + " ]";
     }
 
-    /**
-     * @return the stateChanged
-     */
-    public Integer getStateChanged() {
-        return stateChanged;
-    }
-
-    /**
-     * @param stateChanged the stateChanged to set
-     */
-    public void setStateChanged(Integer stateChanged) {
-        this.stateChanged = stateChanged;
-    }
-    
 }

@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
  */
 @Stateless
 @LocalBean
-@WebService
+
 public class UserSession {
     
     private final Logger logger = Logger.getLogger(UserSession.class);
@@ -51,19 +51,6 @@ public class UserSession {
         
         return response;
     }
-    
-    public BasicResponse updatePolicyScript(String readerName, String policyName, String script) {
-        BasicResponse response = new BasicResponse();
-        logger.debug("Getting policy>" + policyName);
-        try {
-            AutomationPolicies pol = automationDao.getPolicyByName(policyName);
-            response.setSuccess(true);
-            pol.setScript(script);
-            
-        } catch (Exception ex) {
-            response.setMsg(ex.getMessage());
-        }
-        return response;
-    }
+ 
     
 }

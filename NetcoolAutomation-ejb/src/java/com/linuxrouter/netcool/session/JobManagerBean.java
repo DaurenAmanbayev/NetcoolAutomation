@@ -56,8 +56,8 @@ public class JobManagerBean {
         List<AutomationReader> readers = automationDao.getEnabledReaders();
         if (readers != null && readers.size() > 0) {
             for (AutomationReader reader : readers) {
-                if (reader.getAutomationPoliciesList() != null && reader.getAutomationPoliciesList().size() > 0) {
-                    logger.debug("Setting UP the Reader : [" + reader.getReaderName() + "] with :" + reader.getAutomationPoliciesList().size() + " Policy count..");
+                if (reader.getAutomationReaderFilterList()!= null && reader.getAutomationReaderFilterList().size() > 0) {
+                    logger.debug("Setting UP the Reader : [" + reader.getReaderName() + "] ");
                     commitNewScriptJob(reader);
                 } else {
                     logger.debug("The reader: " + reader.getReaderName() + " Is enabled but has no policy in it :(");
@@ -73,8 +73,7 @@ public class JobManagerBean {
         map.put(AutomationConstants.DBPOOL, omniclient.getPoolingConnectionByName(reader.getConnectionName().getConnectionName()));
         map.put(AutomationConstants.READER_CONNECTION_NAME, reader.getConnectionName().getConnectionName());        
         map.put(AutomationConstants.OMNICLIENT, omniclient);
-        map.put(AutomationConstants.SQL_TEXT, reader.getReaderSql());
-        map.put(AutomationConstants.POLICIES, reader.getAutomationPoliciesList());        
+       
         map.put(AutomationConstants.AUTOMATIONDAO, automationDao);        
         JobDetail det = JobManager.commitNewJob(reader.getReaderName(), reader.getCronInterval(), ScriptJob.class, map);        
         

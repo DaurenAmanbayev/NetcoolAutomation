@@ -5,6 +5,7 @@
  */
 package com.linuxrouter.netcool.entitiy;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -27,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "AUTOMATION_CONNECTION")
-@XmlRootElement
+@XmlRootElement 
 @NamedQueries({
     @NamedQuery(name = "AutomationConnection.findAll", query = "SELECT a FROM AutomationConnection a"),
     @NamedQuery(name = "AutomationConnection.findByConnectionName", query = "SELECT a FROM AutomationConnection a WHERE a.connectionName = :connectionName"),
@@ -49,12 +50,13 @@ public class AutomationConnection implements Serializable {
     @Size(max = 255)
     @Column(name = "PASSWORD")
     private String password;
-    @Size(max = 20)
+    @Size(max = 255)
     @Column(name = "JDBC_URL")
     private String jdbcUrl;
     @Column(name = "ENABLED")
     private String enabled;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "connectionName")
+    @Expose(serialize = false)
     private List<AutomationReader> automationReaderList;
 
     public AutomationConnection() {
