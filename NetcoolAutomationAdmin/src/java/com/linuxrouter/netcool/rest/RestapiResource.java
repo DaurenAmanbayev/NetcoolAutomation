@@ -5,16 +5,18 @@
  */
 package com.linuxrouter.netcool.rest;
 
+import com.linuxrouter.netcool.response.BasicResponse;
 import com.linuxrouter.netcool.session.AutomationSession;
 import com.linuxrouter.netcool.session.GsonConverter;
 import com.linuxrouter.netcool.session.UserSession;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import org.apache.log4j.Logger;
@@ -44,6 +46,9 @@ public class RestapiResource {
     @Context
     private UriInfo context;
 
+    @Context
+    private HttpServletRequest request;
+    
     /**
      * Creates a new instance of RestapiResource
      */
@@ -55,10 +60,15 @@ public class RestapiResource {
     @POST 
     @Produces("application/json")
     @Path("user/login")
-    public String doLogin(@QueryParam("user") String user, @QueryParam("password") String password) {
+    public String doLogin(@FormParam("user") String user, @FormParam("password") String password) {
         logger.debug("Auth User: " + user + " With Pass:[********]");
-        return converter.convert2Json(userSession.authUser(user, password));
-    }
+        BasicResponse s = userSession.authUser(user, password);
+        if (s.getSuccess()){
+            request.getSession().setAttribute("AUTH", true);
+            logger.debug("Session created...");
+        }
+        return converter.convert2Json(s);
+    } 
 
     @GET
     @Produces("application/json")
