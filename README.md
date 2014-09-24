@@ -4,7 +4,7 @@ IBM Netcool.
 
 
 ## Development Journal
-20/09/2014: 
+**20/09/2014**: 
  So far i was able to create a Omnibus Connection Pool, this is critical since we donÂ´t want the jobs to crash or
 overloaded omnibus object server.
  Before you continue you shoud know that by "event" I mean alert in alerts.status table...
@@ -60,15 +60,49 @@ The code above will run the:
 Against the object server and for every result it will pass to a groovy shell.
 If the alarm summary fields contains the word "Node Down" it will change the summary to 'This Node Is down...please check...'.
 
-Since IÂ´m using an ObservableHashMap note that the commitChangedEvents method will only commit to the object server those events 
+Since I'm using an ObservableHashMap note that the commitChangedEvents method will only commit to the object server those events 
 that were changed inside the groovy shell. The untouched events will not be commited and for the changed events only the changed fields will be update
 the others will ne untouched.
 
 Running this code in a desktop server took 9000ms to execute.
 
+**24/09/2014**: So I´ve changed a few stuff on the event reader. Now the event reader holds a list of policies that is linked to it and before execution 
+it refreshes the groovy script. The previous version  had to be reloaded if you update the policy.
+I´ve also realized that is more eficient to use StateChange Collumn to keep in track what events had changed since last execution.
+So even if you create a reader with this sql:
+
+```sql
+  select * from alerts.status where Severity > 2
+```
+
+You will see inside omniclient that i concatenate the sql as:
+```java
+ public ArrayList<EventMap> executeQuery(String filter, String connName, AutomationReader reader) {
+        ArrayList<EventMap> list = new ArrayList<>();
+        logger.debug("Executing Query on:" + connName);
+
+        String sql = "select * from alerts.status where 1=1 and StateChange >  " + reader.getStateChanged() + " and " + filter + " order by StateChange ";
+        logger.debug("SQL:::" + sql);
+        try {
+........
+```
+
+The "order by" clause is for us to get later the last StateChange timestamp and run the same from that point.
+This gave a very high performance in event parsing.
+
+I still have plans to create the web interface, so far im updating the scripts using a local desktop editor workarround :( sorry for that.
+
+I also have plans to create a plugin architecture.
+
+Tomorrow i will implement the Policy local storage, this storage will keep objects as it is in the policy execution context and persist it over time.
+This will give the flexibility to create X in Y Synthetic events.
+I still didnt decide the best aproach to implement the local storage.
+
+Im sorry for my terrible english today, Im tired.
 
 
-## Target Feattures
+
+## Target Features
 * SnmpGetRequest for simple host,community,oid
 * SnmpWalkRequest form simple host,community,oid
 * Database integration, easy query or store data from any jdbc compatible resource.
