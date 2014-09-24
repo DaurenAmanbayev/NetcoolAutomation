@@ -76,10 +76,10 @@
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script src="plugins/ace/js-min/ace.js" type="text/javascript" charset="utf-8"></script>
-        <script>
+        <script>          
             var editor = ace.edit("editor");
             editor.setTheme("ace/theme/monokai");
-            editor.getSession().setMode("ace/mode/groovy");
+            editor.getSession().setMode("ace/mode/groovy");           
         </script>
     </body>
 
