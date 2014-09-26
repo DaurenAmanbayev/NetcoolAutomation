@@ -92,6 +92,17 @@ public class AutomationDao {
         }
     }
 
+     public List<AutomationConnection> getAllConnections() {
+        Query q = em.createNamedQuery("AutomationConnection.findAll");
+
+        try {
+            List<AutomationConnection> list = q.getResultList();
+            return list;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    
     public AutomationPolicies getPolicyByName(String name) {
         Query q = em.createNamedQuery("AutomationPolicies.findByPolicyName");
         q.setParameter("policyName", name);

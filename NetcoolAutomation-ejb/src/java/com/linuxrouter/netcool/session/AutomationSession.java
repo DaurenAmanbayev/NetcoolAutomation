@@ -32,7 +32,8 @@ public class AutomationSession {
     private UtilSession utilSession;
 
     public BasicResponse getAllReaders() {
-        BasicResponse response  = new BasicResponse();
+        BasicResponse response = new BasicResponse();
+        response.setSuccess(true);
         response.setPayLoad(automationDao.getAllReaders());
         return response;
     }
@@ -56,6 +57,17 @@ public class AutomationSession {
         } catch (Exception ex) {
             response.setMsg(ex.getMessage());
         }
+        return response;
+    }
+
+    /**
+     * returns a list with all configured connections...
+     * @return 
+     */
+    public BasicResponse getAllConnections() {
+        BasicResponse response = new BasicResponse();
+        response.setSuccess(true);
+        response.setPayLoad(automationDao.getAllConnections());
         return response;
     }
 }

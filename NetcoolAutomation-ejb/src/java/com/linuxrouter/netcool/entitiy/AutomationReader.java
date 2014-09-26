@@ -54,19 +54,19 @@ public class AutomationReader implements Serializable {
     @Column(name = "LOGGING")
     private String logging;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")   
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")
     private List<AutomationReaderFilter> automationReaderFilterList;
 
     @JoinColumn(name = "LOGIN", referencedColumnName = "LOGIN")
-    @ManyToOne(optional = false)   
+    @ManyToOne(optional = false)
     private AutomationUsers login;
 
     @JoinColumn(name = "CONNECTION_NAME", referencedColumnName = "CONNECTION_NAME")
-    @ManyToOne(optional = false)   
+    @ManyToOne(optional = false)
+    @Expose(serialize = false)
     private AutomationConnection connectionName;
 
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")   
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")
     private List<ReaderHistory> readerHistoryList;
 
     public AutomationReader() {

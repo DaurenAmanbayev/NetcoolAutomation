@@ -5,8 +5,7 @@
 
     <%@include file="includes/default-header.jsp" %>
     <style type="text/css" media="screen">
-        #editor { 
-      
+        #editor {      
             height: 400px;
         }
     </style>
@@ -36,7 +35,8 @@
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Netcool Automation Policy Editor - POC</h1>
+                          <!-- /<h1 class="page-header">Netcool Automation Policy Editor - POC</h1> -->
+                          <h1 class="page-header"> </h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -45,38 +45,42 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Connection List
+                                Script Editor
                             </div>
-                            <!-- /.panel-heading -->
-                            <div class="panel-body">
-                                <div class="table-responsive">
-                                    <div id="editor"></div>  
-                                </div>
-                                <!-- /.table-responsive -->
-
+                            <div class="panel-heading">
+                                <button id="syntax-check-btn" type="button" class="btn btn-default btn-circle"><i class="fa fa-check"></i></button>
+                                <button id="save-btn" type="button" class="btn btn-primary btn-circle"><i class="fa fa-save"></i></button>
                             </div>
-                            <!-- /.panel-body -->
-                        </div>
-                        <!-- /.panel -->
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
+                                        <!-- /.panel-heading -->
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <div id="editor"></div>  
+                                            </div>
+                                            <!-- /.table-responsive -->
 
-                <!-- /.row -->
-            </div>
-            <!-- /#page-wrapper -->
+                                        </div>
+                                        <!-- /.panel-body -->
+                                        </div>
+                                        <!-- /.panel -->
+                                        </div>
+                                        <!-- /.col-lg-12 -->
+                                        </div>
 
-        </div>
-        <!-- /#wrapper -->
-        <%@include file="includes/default-botton.jsp" %>
+                                        <!-- /.row -->
+                                        </div>
+                                        <!-- /#page-wrapper -->
 
-        <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-        <script src="plugins/ace/js-min/ace.js" type="text/javascript" charset="utf-8"></script>
-        <script>          
-            var editor = ace.edit("editor");
-            editor.setTheme("ace/theme/monokai");
-            editor.getSession().setMode("ace/mode/groovy");           
-        </script>
-    </body>
+                                        </div>
+                                        <!-- /#wrapper -->
+                                        <%@include file="includes/default-botton.jsp" %>
 
-</html>
+                                        <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+                                        <script src="plugins/ace/js-min/ace.js" type="text/javascript" charset="utf-8"></script>
+                                        <script>
+                                            var editor = ace.edit("editor");
+                                            editor.setTheme("ace/theme/monokai");
+                                            editor.getSession().setMode("ace/mode/groovy");
+                                        </script>
+                                        </body>
+
+                                        </html>

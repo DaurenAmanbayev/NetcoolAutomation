@@ -7,10 +7,10 @@
             </li>
 
             <li>
-                <a href="omnibusconnections.jsp"><i class="fa fa-database fa-fw"></i> Omnibus Connections</a>
+                <a href="omnibusconnections.jsp"><i class="fa fa-database fa-fw"></i> Connections</a>
             </li>
               <li>
-                <a href="policy-editor.jsp"><i class="fa fa-archive fa-fw"></i> Omnibus Connections</a>
+                <a href="policy-editor.jsp"><i class="fa fa-list-alt fa-fw"></i> Policies</a>
             </li>
         </ul>
     </div>

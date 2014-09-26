@@ -15,15 +15,16 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.apache.log4j.Logger;
+import org.codehaus.groovy.control.CompilationFailedException;
 
 /**
  *
  * @author lucas
  */
 public class ScriptJob extends AutomationJob {
-
+    
     private final Logger logger = Logger.getLogger(ScriptJob.class);
-
+    
     @Override
     public void executeContext(Connection con) {
         // Execution Context
@@ -32,11 +33,11 @@ public class ScriptJob extends AutomationJob {
 
         //for each filter in thre reader...validate is filter has filters...
         if (reader.getAutomationReaderFilterList() != null && reader.getAutomationReaderFilterList().size() > 0) {
-
+            
             for (AutomationReaderFilter filter : reader.getAutomationReaderFilterList()) {
-
+                
                 if (filter.getEnabled().equalsIgnoreCase("Y")) {
-
+                    
                     ArrayList<EventMap> events = this.omniClient.executeQuery(filter.getFilterSql(), this.readerConnName, filter);
                     if (events != null && events.size() > 0) {
                         HashMap<String, ArrayList<HashMap<String, Object>>> changedEvents = new HashMap<>();
@@ -44,33 +45,42 @@ public class ScriptJob extends AutomationJob {
                         for (EventMap e : events) {
                             e.setChangedMap(changedEvents);
                         }
-
+                        
                         Integer stateChanged = Integer.parseInt((String) events.get(events.size() - 1).get("StateChange"));
                         Long afterMap = System.currentTimeMillis();
                         logger.debug("Map Took: " + (afterMap - beforeMap) + " ms");
+                        
                         Binding binding = new Binding();
                         binding.setVariable("events", events);
                         binding.setVariable("logger", logger);
+
+                        //in the future expose plugins registered from here...
                         try {
-
+                            
                             GroovyShell shell = new GroovyShell(binding);
-
+                            
                             for (AutomationPolicies p : filter.getAutomationPoliciesList()) {
                                 if (p.getEnabled().equalsIgnoreCase("Y")) {
                                     Long startTime = System.currentTimeMillis();
-                                    shell.evaluate(p.getScript());
+                                    try {
+                                        shell.evaluate(p.getScript());
+                                    } catch (CompilationFailedException ex) {
+                                        //Compilation exeption :/
+                                        logger.error("Fail to compile groovy script :/ ", ex);
+                                    }
                                     Long endTime = System.currentTimeMillis();
                                     logger.debug("Groovy Script[" + p.getPolicyName() + "] Execution Time: " + (endTime - startTime) + "ms");
                                     logger.debug("Changed Events Size is: " + changedEvents.size());
                                 }
                             }
-
+                            
                         } catch (Exception ex) {
                             logger.error("fail to execute script at job: " + this.readerConnName, ex);
                         }
                         if (changedEvents != null && changedEvents.size() > 0) {
                             omniClient.commitChangedEvents(changedEvents, this.readerConnName);
                         }
+                        
                         filter.setStateChange(stateChanged);
                         //automationDao.saveReaderStatus(reader);
                         automationDao.saveFilterStatus(filter);
@@ -85,5 +95,5 @@ public class ScriptJob extends AutomationJob {
             logger.debug("There is no filter in the reader...");
         }
     }
-
+    
 }

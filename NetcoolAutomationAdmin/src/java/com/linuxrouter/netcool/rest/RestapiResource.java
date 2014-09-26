@@ -21,13 +21,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import org.apache.log4j.Logger;
 
-
 /**
  * REST Web Service
  *
  * @author lucas
  */
-
 @Path("restapi")
 @RequestScoped
 public class RestapiResource {
@@ -48,38 +46,38 @@ public class RestapiResource {
 
     @Context
     private HttpServletRequest request;
-    
+
     /**
      * Creates a new instance of RestapiResource
      */
     public RestapiResource() {
     }
 
-   
-
-    @POST 
+    @POST
     @Produces("application/json")
     @Path("user/login")
     public String doLogin(@FormParam("user") String user, @FormParam("password") String password) {
         logger.debug("Auth User: " + user + " With Pass:[********]");
         BasicResponse s = userSession.authUser(user, password);
-        if (s.getSuccess()){
+        if (s.getSuccess()) {
             request.getSession().setAttribute("AUTH", true);
             logger.debug("Session created...");
         }
         return converter.convert2Json(s);
-    } 
+    }
 
     @GET
     @Produces("application/json")
     @Path("reader/list")
     public String getAllReaders() {
-        userSession.authUser("", "");
-        if(userSession != null){
-            logger.debug("oiiiiiii"); 
-        }else{
-            logger.debug("Sou Nulll  :(");
-        }
+
         return converter.convert2Json(automationSession.getAllReaders());
-    }  
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("connection/list")
+    public String getAllConnections() {
+        return converter.convert2Json(automationSession.getAllConnections());
+    }
 }

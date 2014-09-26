@@ -93,7 +93,7 @@ public class OmniClient {
     @Schedule(minute = "*", hour = "*")
     private void printConnectionPoolUsage() {
         for (String key : poolingDataSource.keySet()) {
-            logger.debug("Omnbus Connection [" + key + "] Active: " + connectionPool.get(key).getNumActive() + " Idle: " + connectionPool.get(key).getNumIdle()
+            logger.debug(" Connection Pool [" + key + "] Active: " + connectionPool.get(key).getNumActive() + " Idle: " + connectionPool.get(key).getNumIdle()
             );
         }
     }

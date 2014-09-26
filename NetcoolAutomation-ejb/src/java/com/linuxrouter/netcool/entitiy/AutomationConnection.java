@@ -56,7 +56,7 @@ public class AutomationConnection implements Serializable {
     @Column(name = "ENABLED")
     private String enabled;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "connectionName")
-    @Expose(serialize = false)
+   
     private List<AutomationReader> automationReaderList;
 
     public AutomationConnection() {

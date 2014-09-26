@@ -45,7 +45,23 @@
                             <!-- /.panel-heading -->
                             <div class="panel-body">
                                 <div class="table-responsive">
-
+                                    <table id="connection-table" class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Connection Name</th>
+                                                <th>URL</th>
+                                                <th>Username</th>
+                                                <th>Status</th>
+                                                <th>Reader Count</th>
+                                                <th>Policy Count</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <!-- /.table-responsive -->
 
@@ -66,7 +82,8 @@
         <%@include file="includes/default-botton.jsp" %>
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-       
+        <!-- Custom Theme JavaScript -->
+        <script src="modules/connection-module.js"></script>
 
     </body>
 
