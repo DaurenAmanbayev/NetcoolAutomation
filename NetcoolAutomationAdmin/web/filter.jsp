@@ -94,26 +94,26 @@
                                     <fieldset disabled>
 
                                         <div class="form-group">
-                                            <label>Reader Name</label>
-                                            <input id="reader-name" class="form-control" placeholder="">                                       
+                                            <label>Filter Name</label>
+                                            <input id="filter-name" class="form-control" placeholder="">                                       
                                         </div>
                                     </fieldset>
                                     <div class="form-group">
-                                        <label>Selects</label>
-                                        <select id="connection-cmb" class="form-control">                                           
+                                        <label>Reader</label>
+                                        <select id="reader-cmb" class="form-control">                                           
                                         </select>
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Cron String</label>
-                                        <input id="reader-cron" class="form-control" placeholder="">                                       
+                                        <label>Filer SQL</label>
+                                        <input id="filter-sql" class="form-control" placeholder="">                                       
                                     </div>
 
                                     <div class="form-group">
                                         <label>Status</label>
                                         <div class="checkbox">
                                             <label>
-                                                <input id="reader-enabled" type="checkbox" value="">Enabled
+                                                <input id="filter-enabled" type="checkbox" value="">Enabled
                                             </label>
                                         </div>                                        
                                     </div>
@@ -130,7 +130,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button id="save-reader-data" type="button" class="btn btn-primary">Save changes</button>
+                        <button id="save-filter-data" type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->

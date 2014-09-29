@@ -192,4 +192,29 @@ public class AutomationSession {
         }
         return response;
     }
+    
+    public BasicResponse getFilterByName(String filterName) {
+        BasicResponse response = new BasicResponse();
+        AutomationReaderFilter filter = automationDao.getFilterByName(filterName);
+        if (filter != null) {
+            response.setSuccess(true);
+            response.setPayLoad(filter);
+        }
+        return response;
+    }
+    
+    public BasicResponse updateFilterByName(String filterName, String readerName, String filterSql, String enabled) {
+        BasicResponse response = new BasicResponse();
+        AutomationReaderFilter filter = automationDao.getFilterByName(filterName);
+        AutomationReader reader = automationDao.getReaderByName(readerName);
+        filter.setReaderName(reader);
+        filter.setFilterSql(filterSql);
+        filter.setEnabled(enabled);
+        try {
+            automationDao.saveFilterStatus(filter);
+            response.setSuccess(true);
+        } catch (Exception ex) {
+        }
+        return response;
+    }
 }

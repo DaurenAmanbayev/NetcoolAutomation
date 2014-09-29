@@ -7,7 +7,7 @@ ReaderInterface = function () {
             ReaderInterface.refreshOnClose();
 
         },
-        populateCmbConnections: function () { 
+        populateCmbConnections: function () {
             $.ajax({
                 type: "get",
                 dataType: "json",
@@ -80,7 +80,7 @@ ReaderInterface = function () {
                 $.ajax({
                     type: "get",
                     dataType: "json",
-                    url: "webresources/restapi/reader/ALL_EVENTS",
+                    url: "webresources/restapi/reader/" + readerName,
                     success: function (response) {
                         if (response.success) {
                             logger.debug("Got Data ok xD");
@@ -120,7 +120,7 @@ ReaderInterface = function () {
                 }
             }).responseText);
             return data.payLoad;
-        }, 
+        },
         saveConnection: function () {
             $("#save-reader-data").click(function () {
                 logger.debug("Saving Reader Data..." + $("#reader-name").val());

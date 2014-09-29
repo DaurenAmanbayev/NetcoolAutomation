@@ -2,6 +2,27 @@ FilterIinterface = function () {
     return{
         init: function () {
             FilterIinterface.loadFilter();
+            FilterIinterface.populateCmbReaders();
+            FilterIinterface.saveFilter();
+        },
+        populateCmbReaders: function () {
+            $.ajax({
+                type: "get",
+                dataType: "json",
+                url: "webresources/restapi/reader/list",
+                success: function (response) {
+                    if (response.success) {
+                        var html = '';
+                        logger.debug("Reader Lists Size is: " + response.payLoad.length);
+                        for (x in response.payLoad) {
+                            var reader = response.payLoad[x];
+                            $("#reader-cmb").append($("<option></option>")
+                                    .attr("value", reader.readerName)
+                                    .text(reader.readerName));
+                        }
+                    }
+                }
+            });
         },
         loadFilter: function () {
             logger.debug("Loading Filter Lists");
@@ -38,6 +59,7 @@ FilterIinterface = function () {
                             html += '</tr>';
                         }
                         $('#filter-table tbody').html(html);
+                        FilterIinterface.clickEditButton();
                     }
                 }
             });
@@ -56,6 +78,78 @@ FilterIinterface = function () {
                 }
             }).responseText);
             return data.payLoad;
+        },
+        clickEditButton: function () {
+            $(".edit-connection").click(function () {
+                logger.debug("Edit Connection Name: " + $(this).data('reader-name'));
+                var filterName = $(this).data('filter-name');
+                //Popula o form
+                //webresources/restapi/connection/DEFAULT_OMNIBUS
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    url: "webresources/restapi/filter/" + filterName,
+                    success: function (response) {
+                        if (response.success) {
+                            logger.debug("Got Data ok xD");
+                            var filter = response.payLoad;
+                            $("#filter-name").val(filter.filterName);
+
+                            $("#filter-sql").val(filter.filterSql);
+
+                            var readerName = FilterIinterface.getReader(filterName).readerName;
+
+                            //$("#connection-enabled").val(connection.enabled);
+                            if (filter.enabled == "Y" || filter.enabled == "y") {
+                                $("#filter-enabled").prop('checked', true);
+                                $("#filter-enabled").prop('value', "Y");
+                            } else {
+                                $("#filter-enabled").prop('checked', false);
+                                $("#filter-enabled").prop('value', "N");
+                            }
+                            $("#reader-cmb").val(readerName);
+
+                        }
+                    }});
+            });
+        },
+        saveFilter: function () {
+            $("#save-filter-data").click(function () {
+                logger.debug("Saving Reader Data..." + $("#filter-name").val());
+                var filterName = $("#filter-name").val();
+                var readerName = $("#reader-cmb").val();
+                var filterSql = $("#filter-sql").val();
+
+                var readerEnabled = "N";
+                if ($("#filter-enabled").prop('checked')) {
+                    readerEnabled = "Y";
+                }
+
+                $.ajax({
+                    type: "post",
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    dataType: "json",
+                    //webresources/restapi/reader/ALL_EVENTS
+                    url: "webresources/restapi/filter/" + filterName + "/update",
+                    data: {
+                        readerName: readerName,
+                        fiterSql: filterSql,                       
+                        enabled: readerEnabled
+
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            logger.debug("Connection Data Updated Success");
+
+                        } else {
+                            logger.error("Failed to update connection data");
+
+                        }
+                    }
+                });
+
+                logger.debug("Saving:::  " + readerName + " " + readerEnabled);
+            });
         }
     };
 }();

@@ -130,10 +130,27 @@ public class RestapiResource {
         return converter.convert2Json(automationSession.getAllFilters());
     }
     
+     @GET
+    @Produces("application/json")
+    @Path("filter/{name}")
+    public String getFilterByBame(@PathParam("name") String filterName) {
+        return converter.convert2Json(automationSession.getFilterByName(filterName));
+    }
+    
     @GET
     @Produces("application/json")
     @Path("reader/byfilter/{name}")
     public String getReaderByFilter(@PathParam("name") String filterName) {
         return converter.convert2Json(automationSession.getReaderByFilterName(filterName));
+    }
+    
+    @POST
+    @Produces("application/json")
+    @Path("filter/{filterName}/update")
+    public String updateFilterByName(@PathParam("filterName") String filterName,
+            @FormParam("readerName") String readerName,
+            @FormParam("fiterSql") String filterSql,
+            @FormParam("enabled") String enable) {
+        return converter.convert2Json(automationSession.updateFilterByName(filterName, readerName, filterSql, enable));
     }
 }
