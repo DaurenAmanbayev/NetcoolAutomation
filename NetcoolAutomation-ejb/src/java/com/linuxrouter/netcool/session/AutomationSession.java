@@ -34,7 +34,13 @@ public class AutomationSession {
     private OmniClient omniClient;
     @EJB
     private UtilSession utilSession;
+    @EJB
+    private JobManagerBean jobManager;
 
+    /**
+     * List All readers...
+     * @return 
+     */
     public BasicResponse getAllReaders() {
         BasicResponse response = new BasicResponse();
         response.setSuccess(true);
@@ -76,6 +82,11 @@ public class AutomationSession {
         return response;
     }
 
+    /**
+     * get a single connection by name
+     * @param name
+     * @return 
+     */
     public BasicResponse getConnectionByName(String name) {
         BasicResponse response = new BasicResponse();
         response.setSuccess(true);
@@ -83,6 +94,15 @@ public class AutomationSession {
         return response;
     }
 
+    /**
+     * Updates a reader connection by name
+     * @param name
+     * @param user
+     * @param pass
+     * @param url
+     * @param enabled
+     * @return 
+     */
     public BasicResponse updateConnectionByName(String name, String user, String pass, String url, String enabled) {
         BasicResponse response = new BasicResponse();
         AutomationConnection connection = automationDao.getConnectionByName(name);
@@ -94,6 +114,13 @@ public class AutomationSession {
         try {
             logger.debug("Going to save...");
             automationDao.saveConnection(connection);
+           // if (!connection.getEnabled().equalsIgnoreCase("Y")) {//disabling...
+                for (AutomationReader reader : connection.getAutomationReaderList()) {
+                    jobManager.updateReader(reader);
+                }
+           // }else{
+            
+            //}
             omniClient.configureConnections();//critico
             response.setSuccess(true);
 
@@ -101,5 +128,16 @@ public class AutomationSession {
             ex.printStackTrace();
         }
         return response;
+    }
+    
+    public BasicResponse getConnectionByReaderName(String readerName){
+          BasicResponse response = new BasicResponse();
+          AutomationReader reader = automationDao.getReaderByName(readerName);
+          if (reader!=null){
+              AutomationConnection connection = reader.getConnectionName();
+              response.setSuccess(true);
+              response.setPayLoad(connection);
+          }
+          return response;
     }
 }

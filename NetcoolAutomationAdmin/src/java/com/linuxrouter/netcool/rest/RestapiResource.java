@@ -30,21 +30,21 @@ import org.apache.log4j.Logger;
 @Path("restapi")
 @RequestScoped
 public class RestapiResource {
-    
+
     private final Logger logger = Logger.getLogger(RestapiResource.class);
-    
+
     @EJB
     private GsonConverter converter;
-    
+
     @EJB
     private AutomationSession automationSession;
-    
+
     @EJB
     private UserSession userSession;
-    
+
     @Context
     private UriInfo context;
-    
+
     @Context
     private HttpServletRequest request;
 
@@ -53,7 +53,7 @@ public class RestapiResource {
      */
     public RestapiResource() {
     }
-    
+
     @POST
     @Produces("application/json")
     @Path("user/login")
@@ -66,29 +66,29 @@ public class RestapiResource {
         }
         return converter.convert2Json(s);
     }
-    
+
     @GET
     @Produces("application/json")
     @Path("reader/list")
     public String getAllReaders() {
-        
+
         return converter.convert2Json(automationSession.getAllReaders());
     }
-    
+
     @GET
     @Produces("application/json")
     @Path("connection/list")
     public String getAllConnections() {
         return converter.convert2Json(automationSession.getAllConnections());
     }
-    
+
     @GET
     @Produces("application/json")
     @Path("connection/{name}")
     public String getConnectionByName(@PathParam("name") String conName) {
         return converter.convert2Json(automationSession.getConnectionByName(conName));
     }
-    
+
     @POST
     @Produces("application/json")
     @Path("connection/{name}/update")
@@ -97,5 +97,12 @@ public class RestapiResource {
             @FormParam("url") String url, @FormParam("enabled") String enabled) {
         logger.debug("Got user:" + user);
         return converter.convert2Json(automationSession.updateConnectionByName(conName, user, pass, url, enabled));
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("connection/byreader/{name}")
+    public String getConnectionByReaderName(@PathParam("name") String readerName) {
+        return converter.convert2Json(automationSession.getConnectionByReaderName(readerName));
     }
 }

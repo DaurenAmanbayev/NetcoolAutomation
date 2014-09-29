@@ -30,7 +30,8 @@ LoginInterface = function () {
                 success: function (response) {
                     if (response.success) {
                         logger.debug("Login ok xD");
-                        window.location.href = "index.jsp";
+                        //window.location.href = "index.jsp";
+                        window.location.href = "omnibusconnections.jsp";
                     }   
                 }
             });

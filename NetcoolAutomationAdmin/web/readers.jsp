@@ -31,7 +31,7 @@
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Omnibus Connection Settings</h1>
+                        <h1 class="page-header">Reader Setings</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -45,16 +45,15 @@
                             <!-- /.panel-heading -->
                             <div class="panel-body">
                                 <div class="table-responsive">
-                                    <table id="connection-table" class="table table-striped table-bordered table-hover">
+                                    <table id="reader-table" class="table table-striped table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Connection Name</th>
-                                                <th>URL</th>
-                                                <th>Username</th>
+                                                <th>Reader Name</th>
+                                                <th>Reader Connection</th>
+                                                <th>Cron String</th>
                                                 <th>Status</th>
-                                                <th>Reader Count</th>
-                                                <th>Policy Count</th>
+                                                <th>Filter Count</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -86,7 +85,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Edit Omnibus Connection</h4>
+                        <h4 class="modal-title" id="myModalLabel">Edit Reader Settings</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -95,21 +94,17 @@
                                     <fieldset disabled>
 
                                         <div class="form-group">
-                                            <label>Connection Name</label>
+                                            <label>Reader Name</label>
                                             <input id="connection-name" class="form-control" placeholder="">                                       
                                         </div>
                                     </fieldset>
                                     <div class="form-group">
-                                        <label>JDBC URL </label>
+                                        <label>Reader Connection</label>
                                         <input id="connection-url"  class="form-control" placeholder="">                                       
                                     </div>
                                     <div class="form-group">
-                                        <label>Username</label>
+                                        <label>Cron String</label>
                                         <input id="connection-user" class="form-control" placeholder="">                                       
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Password</label>
-                                        <input  id="connection-pass" class="form-control" placeholder="">                                       
                                     </div>
 
                                     <div class="form-group">
@@ -145,7 +140,7 @@
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <!-- Custom Theme JavaScript -->
-        <script src="modules/connection-module.js"></script>
+        <script src="modules/reader-module.js"></script>
 
     </body>
 

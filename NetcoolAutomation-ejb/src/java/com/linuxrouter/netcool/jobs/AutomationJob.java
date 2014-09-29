@@ -39,9 +39,9 @@ public abstract class AutomationJob implements Job {
     protected HashMap<String, Connection> connectionMap = null;
     protected Logger logger = null;
     protected OmniClient omniClient = null;
-   
+
     protected String groovyScript = "";
-   
+
     protected String readerConnName = "";
 
     protected AutomationDao automationDao;
@@ -55,11 +55,11 @@ public abstract class AutomationJob implements Job {
     @Override
     public void execute(JobExecutionContext jec) throws JobExecutionException {
         this.policyName = jec.getJobDetail().getJobDataMap().getString(AutomationConstants.JOBNAME);
-        this.omniBusConnection = (PoolingDataSource<PoolableConnection>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.DBPOOL);
+
         this.omniClient = (OmniClient) jec.getJobDetail().getJobDataMap().get(AutomationConstants.OMNICLIENT);
-       
+
         this.readerConnName = (String) jec.getJobDetail().getJobDataMap().get(AutomationConstants.READER_CONNECTION_NAME);
-      
+        this.omniBusConnection = omniClient.getPoolingConnectionByName(readerConnName);
         this.automationDao = (AutomationDao) jec.getJobDetail().getJobDataMap().get(AutomationConstants.AUTOMATIONDAO);
         //this.connectionMap = (HashMap<String, Connection>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.CONNECTION_HASH);
         logger = Logger.getLogger(this.policyName);
@@ -88,7 +88,7 @@ public abstract class AutomationJob implements Job {
         logger.debug("Done All Script:" + this.policyName + " Time Took: " + (endTime - startTime) + " ms");
     }
 
-    /** 
+    /**
      * Has the implementation from the class
      */
     public abstract void executeContext(Connection con);

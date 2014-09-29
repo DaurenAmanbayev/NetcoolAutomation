@@ -6,6 +6,7 @@ package com.linuxrouter.netcool.jobs;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -15,6 +16,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import static org.quartz.JobBuilder.*;
 import static org.quartz.CronScheduleBuilder.*;
 import org.quartz.JobDataMap;
+import org.quartz.JobKey;
 import static org.quartz.TriggerBuilder.*;
 
 /**
@@ -73,6 +75,18 @@ public class JobManager {
             logger.error("Fail to commit new Job...", ex);
         }
         return job;
+    }
+
+    /**
+     *
+     * @param key
+     */
+    public static void stopJob(JobKey key) {
+        try {
+            scheduler.deleteJob(key);
+        } catch (SchedulerException ex) {
+            logger.error("Fail to Remove job: " + key.getName());
+        }
     }
 
     /**

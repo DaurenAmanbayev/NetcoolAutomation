@@ -8,6 +8,7 @@ package com.linuxrouter.netcool.json;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.annotations.Expose;
+import java.util.HashMap;
 import org.apache.log4j.Logger;
 
 /**
@@ -19,6 +20,10 @@ public class EntitySerializationExclusitionStrategy implements ExclusionStrategy
 
     private final Logger logger = Logger.getLogger(EntitySerializationExclusitionStrategy.class);
 
+    public EntitySerializationExclusitionStrategy() {
+        //logger.debug("New Serialization created...");
+    }
+
     @Override
     public boolean shouldSkipField(FieldAttributes fa) {
 
@@ -29,6 +34,7 @@ public class EntitySerializationExclusitionStrategy implements ExclusionStrategy
 
             return true;
         }
+
         if (expose != null) {
             //  logger.debug("Skiping " + fa.getName() + " ::" + expose.serialize());
             return !expose.serialize();
