@@ -5,7 +5,9 @@
  */
 package com.linuxrouter.netcool.session;
 
+import com.linuxrouter.netcool.client.OmniClient;
 import com.linuxrouter.netcool.dao.AutomationDao;
+import com.linuxrouter.netcool.entitiy.AutomationConnection;
 import com.linuxrouter.netcool.entitiy.AutomationPolicies;
 import com.linuxrouter.netcool.entitiy.AutomationReader;
 import com.linuxrouter.netcool.response.BasicResponse;
@@ -28,6 +30,8 @@ public class AutomationSession {
     @EJB
     private AutomationDao automationDao;
 
+    @EJB
+    private OmniClient omniClient;
     @EJB
     private UtilSession utilSession;
 
@@ -62,12 +66,40 @@ public class AutomationSession {
 
     /**
      * returns a list with all configured connections...
-     * @return 
+     *
+     * @return
      */
     public BasicResponse getAllConnections() {
         BasicResponse response = new BasicResponse();
         response.setSuccess(true);
         response.setPayLoad(automationDao.getAllConnections());
+        return response;
+    }
+
+    public BasicResponse getConnectionByName(String name) {
+        BasicResponse response = new BasicResponse();
+        response.setSuccess(true);
+        response.setPayLoad(automationDao.getConnectionByName(name));
+        return response;
+    }
+
+    public BasicResponse updateConnectionByName(String name, String user, String pass, String url, String enabled) {
+        BasicResponse response = new BasicResponse();
+        AutomationConnection connection = automationDao.getConnectionByName(name);
+        connection.setEnabled(enabled);
+        connection.setUsername(user);
+        connection.setJdbcUrl(url);
+        connection.setPassword(pass);
+        response.setPayLoad(connection);
+        try {
+            logger.debug("Going to save...");
+            automationDao.saveConnection(connection);
+            omniClient.configureConnections();//critico
+            response.setSuccess(true);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return response;
     }
 }

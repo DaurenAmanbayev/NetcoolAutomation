@@ -16,6 +16,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -29,21 +30,21 @@ import org.apache.log4j.Logger;
 @Path("restapi")
 @RequestScoped
 public class RestapiResource {
-
+    
     private final Logger logger = Logger.getLogger(RestapiResource.class);
-
+    
     @EJB
     private GsonConverter converter;
-
+    
     @EJB
     private AutomationSession automationSession;
-
+    
     @EJB
     private UserSession userSession;
-
+    
     @Context
     private UriInfo context;
-
+    
     @Context
     private HttpServletRequest request;
 
@@ -52,7 +53,7 @@ public class RestapiResource {
      */
     public RestapiResource() {
     }
-
+    
     @POST
     @Produces("application/json")
     @Path("user/login")
@@ -65,19 +66,36 @@ public class RestapiResource {
         }
         return converter.convert2Json(s);
     }
-
+    
     @GET
     @Produces("application/json")
     @Path("reader/list")
     public String getAllReaders() {
-
+        
         return converter.convert2Json(automationSession.getAllReaders());
     }
-
+    
     @GET
     @Produces("application/json")
     @Path("connection/list")
     public String getAllConnections() {
         return converter.convert2Json(automationSession.getAllConnections());
+    }
+    
+    @GET
+    @Produces("application/json")
+    @Path("connection/{name}")
+    public String getConnectionByName(@PathParam("name") String conName) {
+        return converter.convert2Json(automationSession.getConnectionByName(conName));
+    }
+    
+    @POST
+    @Produces("application/json")
+    @Path("connection/{name}/update")
+    public String updateConnectionByName(@PathParam("name") String conName,
+            @FormParam("user") String user, @FormParam("pass") String pass,
+            @FormParam("url") String url, @FormParam("enabled") String enabled) {
+        logger.debug("Got user:" + user);
+        return converter.convert2Json(automationSession.updateConnectionByName(conName, user, pass, url, enabled));
     }
 }

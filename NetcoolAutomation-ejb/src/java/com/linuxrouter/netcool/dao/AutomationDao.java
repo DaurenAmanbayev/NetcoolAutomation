@@ -92,7 +92,18 @@ public class AutomationDao {
         }
     }
 
-     public List<AutomationConnection> getAllConnections() {
+    public List<AutomationConnection> getDisabledConnection() {
+        Query q = em.createNamedQuery("AutomationConnection.findByEnabled");
+        q.setParameter("enabled", "N");
+        try {
+            List<AutomationConnection> list = q.getResultList();
+            return list;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List<AutomationConnection> getAllConnections() {
         Query q = em.createNamedQuery("AutomationConnection.findAll");
 
         try {
@@ -102,7 +113,7 @@ public class AutomationDao {
             return null;
         }
     }
-    
+
     public AutomationPolicies getPolicyByName(String name) {
         Query q = em.createNamedQuery("AutomationPolicies.findByPolicyName");
         q.setParameter("policyName", name);
@@ -127,5 +138,18 @@ public class AutomationDao {
 
     public void saveFilterStatus(AutomationReaderFilter filter) {
         em.merge(filter);
+    }
+
+    public void saveConnection(AutomationConnection connection) {
+        logger.debug("Before");
+        em.merge(connection);
+        logger.debug("Merged..");
+    }
+
+    public AutomationConnection getConnectionByName(String connectionName) {
+        Query q = em.createNamedQuery("AutomationConnection.findByConnectionName");
+        q.setParameter("connectionName", connectionName);
+        AutomationConnection connection = (AutomationConnection) q.getSingleResult();
+        return connection;
     }
 }

@@ -73,21 +73,35 @@ public class OmniClient {
 //    }
     private void setConnectionPools(String name, String url, String user, String pass) {
         logger.debug("Starting Netcool Automation Connection Pool");
-        Driver drv = new com.sybase.jdbc3.jdbc.SybDriver();
-        try {
-            DriverManager.registerDriver(drv);
-        } catch (SQLException ex) {
-            logger.error("Failed to create an instance of SybDriver...", ex);
-        }
+        if (connectionPool.get(name) == null) {
+            Driver drv = new com.sybase.jdbc3.jdbc.SybDriver();
+            try {
+                DriverManager.registerDriver(drv);
+            } catch (SQLException ex) {
+                logger.error("Failed to create an instance of SybDriver...", ex);
+            }
 
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(url, user, pass);
-        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
-        ObjectPool<PoolableConnection> cp = new GenericObjectPool<>(poolableConnectionFactory);
-        poolableConnectionFactory.setPool(cp);
-        PoolingDataSource<PoolableConnection> pds = new PoolingDataSource<>(cp);
-        poolingDataSource.put(name, pds);
-        connectionPool.put(name, cp);
-        logger.debug("Configured: " + name + " At Omnit bus pool");
+            ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(url, user, pass);
+            PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
+            ObjectPool<PoolableConnection> cp = new GenericObjectPool<>(poolableConnectionFactory);
+            poolableConnectionFactory.setPool(cp);
+            PoolingDataSource<PoolableConnection> pds = new PoolingDataSource<>(cp);
+            poolingDataSource.put(name, pds);
+            connectionPool.put(name, cp);
+            logger.debug("Configured: " + name + " At Omnit bus pool");
+        } else {
+            AutomationConnection con = automationDao.getConnectionByName(name);
+            ObjectPool<PoolableConnection> pool = connectionPool.remove(name);
+            PoolingDataSource<PoolableConnection> dst = poolingDataSource.remove(name);
+            pool.close();
+            if (con.getEnabled().equalsIgnoreCase("Y")) {
+                setConnectionPools(name, url, user, pass);
+                logger.debug("Reconfiguring...");
+            } else {
+                logger.debug("Connection Removed ..");
+            }
+
+        }
     }
 
     @Schedule(minute = "*", hour = "*")
@@ -198,6 +212,24 @@ public class OmniClient {
         } else {
             logger.debug("No Connection found...");
         }
+
+        connections = automationDao.getDisabledConnection();
+        if (connections != null) {
+            if (connections.size() > 0) {
+                //lets configure the connections pools xD
+                for (AutomationConnection disCon : connections) {
+                    if (connectionPool.get(disCon.getConnectionName()) != null) {
+                        AutomationConnection con = automationDao.getConnectionByName(disCon.getConnectionName());
+                        ObjectPool<PoolableConnection> pool = connectionPool.remove(disCon.getConnectionName());
+                        PoolingDataSource<PoolableConnection> dst = poolingDataSource.remove(disCon.getConnectionName());
+                        pool.close();
+                        logger.debug("Removed Connection: " + disCon.getConnectionName());
+                    }
+
+                }
+            }
+        }
+        //  
 
     }
 

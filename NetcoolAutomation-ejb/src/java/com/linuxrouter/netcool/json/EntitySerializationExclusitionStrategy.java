@@ -30,7 +30,7 @@ public class EntitySerializationExclusitionStrategy implements ExclusionStrategy
             return true;
         }
         if (expose != null) {
-            logger.debug("Skiping " + fa.getName() + " ::" + expose.serialize());
+            //  logger.debug("Skiping " + fa.getName() + " ::" + expose.serialize());
             return !expose.serialize();
         } else {
             return false;
