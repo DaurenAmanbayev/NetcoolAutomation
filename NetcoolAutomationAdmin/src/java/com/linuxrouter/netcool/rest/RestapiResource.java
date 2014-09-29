@@ -129,21 +129,21 @@ public class RestapiResource {
     public String getAllFilters() {
         return converter.convert2Json(automationSession.getAllFilters());
     }
-    
-     @GET
+
+    @GET
     @Produces("application/json")
     @Path("filter/{name}")
     public String getFilterByBame(@PathParam("name") String filterName) {
         return converter.convert2Json(automationSession.getFilterByName(filterName));
     }
-    
+
     @GET
     @Produces("application/json")
     @Path("reader/byfilter/{name}")
     public String getReaderByFilter(@PathParam("name") String filterName) {
         return converter.convert2Json(automationSession.getReaderByFilterName(filterName));
     }
-    
+
     @POST
     @Produces("application/json")
     @Path("filter/{filterName}/update")
@@ -152,5 +152,19 @@ public class RestapiResource {
             @FormParam("fiterSql") String filterSql,
             @FormParam("enabled") String enable) {
         return converter.convert2Json(automationSession.updateFilterByName(filterName, readerName, filterSql, enable));
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("poilicy/{name}")
+    public String getPolicyByName(@PathParam("name") String policeName) {
+        return converter.convert2Json(automationSession.getPolicyByName(policeName));
+    }
+
+    @POST
+    @Produces("application/json")
+    @Path("poilicy/{name}/update")
+    public String updatePolicyScript(@PathParam("name") String policeName,@FormParam("script") String script) {
+        return converter.convert2Json(automationSession.updatePolicyScript(policeName,script));
     }
 }

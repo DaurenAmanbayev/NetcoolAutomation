@@ -65,7 +65,7 @@ public class AutomationSession {
      * @param script
      * @return
      */
-    public BasicResponse updatePolicyScript(String readerName, String policyName, String script) {
+    public BasicResponse updatePolicyScript( String policyName, String script) {
         BasicResponse response = new BasicResponse();
         logger.debug("Getting policy: >" + policyName);
         try {
@@ -217,4 +217,15 @@ public class AutomationSession {
         }
         return response;
     }
+    
+    public BasicResponse getPolicyByName(String policyName) {
+        BasicResponse response = new BasicResponse();
+        AutomationPolicies pol = automationDao.getPolicyByName(policyName);
+        if (pol != null) {
+            response.setPayLoad(pol);
+            response.setSuccess(true);
+        }
+        return response;
+    }
+    
 }
