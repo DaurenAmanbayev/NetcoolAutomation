@@ -38,7 +38,7 @@ ConnectionInterface = function () {
                             }
 
                             logger.debug("Loading Connection: " + connections[x].connectionName + " Reader Count: " + readerCount + " Policy Count: " + policyCount);
-                            var counter= x;
+                            var counter = x;
                             counter++;
                             html += '<tr>';
                             html += ' <td>' + counter + '</td>';
@@ -48,7 +48,7 @@ ConnectionInterface = function () {
                             html += ' <td>' + enabledFlag + '</td>';
                             html += ' <td>' + readerCount + '</td>';
                             html += ' <td>' + policyCount + '</td>';
-                            html += ' <td> <button type="button" class="btn btn-primary">Edit</button></td>';
+                            html += ' <td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#connection-detail" data-connection-name= "' + connectionName + '">Edit</button></td>';
                             html += '</tr>';
                         }
                         $('#connection-table tbody').html(html);
