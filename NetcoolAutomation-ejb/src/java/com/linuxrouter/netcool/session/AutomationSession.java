@@ -10,6 +10,7 @@ import com.linuxrouter.netcool.dao.AutomationDao;
 import com.linuxrouter.netcool.entitiy.AutomationConnection;
 import com.linuxrouter.netcool.entitiy.AutomationPolicies;
 import com.linuxrouter.netcool.entitiy.AutomationReader;
+import com.linuxrouter.netcool.entitiy.AutomationReaderFilter;
 import com.linuxrouter.netcool.response.BasicResponse;
 import java.util.List;
 import javax.ejb.EJB;
@@ -24,12 +25,12 @@ import org.apache.log4j.Logger;
 @Stateless
 @LocalBean
 public class AutomationSession {
-
+    
     private final Logger logger = Logger.getLogger(AutomationSession.class);
-
+    
     @EJB
     private AutomationDao automationDao;
-
+    
     @EJB
     private OmniClient omniClient;
     @EJB
@@ -39,12 +40,20 @@ public class AutomationSession {
 
     /**
      * List All readers...
-     * @return 
+     *
+     * @return
      */
     public BasicResponse getAllReaders() {
         BasicResponse response = new BasicResponse();
         response.setSuccess(true);
         response.setPayLoad(automationDao.getAllReaders());
+        return response;
+    }
+    
+    public BasicResponse getReaderByName(String name) {
+        BasicResponse response = new BasicResponse();
+        response.setSuccess(true);
+        response.setPayLoad(automationDao.getReaderByName(name));
         return response;
     }
 
@@ -63,7 +72,7 @@ public class AutomationSession {
             AutomationPolicies pol = automationDao.getPolicyByName(policyName);
             response.setSuccess(true);
             pol.setScript(script);
-
+            
         } catch (Exception ex) {
             response.setMsg(ex.getMessage());
         }
@@ -84,8 +93,9 @@ public class AutomationSession {
 
     /**
      * get a single connection by name
+     *
      * @param name
-     * @return 
+     * @return
      */
     public BasicResponse getConnectionByName(String name) {
         BasicResponse response = new BasicResponse();
@@ -96,12 +106,13 @@ public class AutomationSession {
 
     /**
      * Updates a reader connection by name
+     *
      * @param name
      * @param user
      * @param pass
      * @param url
      * @param enabled
-     * @return 
+     * @return
      */
     public BasicResponse updateConnectionByName(String name, String user, String pass, String url, String enabled) {
         BasicResponse response = new BasicResponse();
@@ -114,30 +125,71 @@ public class AutomationSession {
         try {
             logger.debug("Going to save...");
             automationDao.saveConnection(connection);
-           // if (!connection.getEnabled().equalsIgnoreCase("Y")) {//disabling...
-                for (AutomationReader reader : connection.getAutomationReaderList()) {
-                    jobManager.updateReader(reader);
-                }
+            // if (!connection.getEnabled().equalsIgnoreCase("Y")) {//disabling...
+            for (AutomationReader reader : connection.getAutomationReaderList()) {
+                jobManager.updateReader(reader);
+            }
            // }else{
-            
+
             //}
             omniClient.configureConnections();//critico
             response.setSuccess(true);
-
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return response;
     }
     
-    public BasicResponse getConnectionByReaderName(String readerName){
-          BasicResponse response = new BasicResponse();
-          AutomationReader reader = automationDao.getReaderByName(readerName);
-          if (reader!=null){
-              AutomationConnection connection = reader.getConnectionName();
-              response.setSuccess(true);
-              response.setPayLoad(connection);
-          }
-          return response;
+    public BasicResponse getConnectionByReaderName(String readerName) {
+        BasicResponse response = new BasicResponse();
+        AutomationReader reader = automationDao.getReaderByName(readerName);
+        if (reader != null) {
+            AutomationConnection connection = reader.getConnectionName();
+            response.setSuccess(true);
+            response.setPayLoad(connection);
+        }
+        return response;
+    }
+    
+    public BasicResponse updateReaderByName(String readerName, String connectionName, String cronString, String enabled) {
+        BasicResponse response = new BasicResponse();
+        logger.debug("Getting connection: " + connectionName + " For Reader : " + readerName);
+        AutomationConnection connection = automationDao.getConnectionByName(connectionName);
+        AutomationReader reader = automationDao.getReaderByName(readerName);
+        reader.setConnectionName(connection);
+        reader.setCronInterval(cronString);
+        reader.setEnabled(enabled);
+        try {
+            automationDao.saveReaderStatus(reader);
+            response.setSuccess(true);
+            jobManager.updateReader(reader);
+        } catch (Exception ex) {
+            response.setMsg("Failed to save connection");
+        }
+        
+        return response;
+        
+    }
+    
+    public BasicResponse getAllFilters() {
+        BasicResponse response = new BasicResponse();
+        List<AutomationReaderFilter> list = null;
+        list = automationDao.getAllFilters();
+        if (list != null) {
+            response.setPayLoad(list);
+            response.setSuccess(true);
+        }
+        return response;
+    }
+    
+    public BasicResponse getReaderByFilterName(String filterName) {
+        BasicResponse response = new BasicResponse();
+        AutomationReaderFilter filter = automationDao.getFilterByName(filterName);
+        if (filter != null) {
+            response.setSuccess(true);
+            response.setPayLoad(filter.getReaderName());
+        }
+        return response;
     }
 }

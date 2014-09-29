@@ -77,6 +77,13 @@ public class RestapiResource {
 
     @GET
     @Produces("application/json")
+    @Path("reader/{name}")
+    public String getReaderByName(@PathParam("name") String name) {
+        return converter.convert2Json(automationSession.getReaderByName(name));
+    }
+
+    @GET
+    @Produces("application/json")
     @Path("connection/list")
     public String getAllConnections() {
         return converter.convert2Json(automationSession.getAllConnections());
@@ -104,5 +111,29 @@ public class RestapiResource {
     @Path("connection/byreader/{name}")
     public String getConnectionByReaderName(@PathParam("name") String readerName) {
         return converter.convert2Json(automationSession.getConnectionByReaderName(readerName));
+    }
+
+    @POST
+    @Produces("application/json")
+    @Path("reader/{readerName}/update")
+    public String updateReaderByName(@PathParam("readerName") String readerName,
+            @FormParam("connectionName") String connectionName,
+            @FormParam("cronString") String cronString,
+            @FormParam("enabled") String enable) {
+        return converter.convert2Json(automationSession.updateReaderByName(readerName, connectionName, cronString, enable));
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("filter/list")
+    public String getAllFilters() {
+        return converter.convert2Json(automationSession.getAllFilters());
+    }
+    
+    @GET
+    @Produces("application/json")
+    @Path("reader/byfilter/{name}")
+    public String getReaderByFilter(@PathParam("name") String filterName) {
+        return converter.convert2Json(automationSession.getReaderByFilterName(filterName));
     }
 }

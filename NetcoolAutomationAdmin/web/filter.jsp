@@ -31,7 +31,7 @@
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Reader Setings</h1>
+                        <h1 class="page-header">Filter Setings</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -45,15 +45,15 @@
                             <!-- /.panel-heading -->
                             <div class="panel-body">
                                 <div class="table-responsive">
-                                    <table id="reader-table" class="table table-striped table-bordered table-hover">
+                                    <table id="filter-table" class="table table-striped table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
+                                                <th>Filter Name</th>
                                                 <th>Reader Name</th>
-                                                <th>Reader Connection</th>
-                                                <th>Cron String</th>
-                                                <th>Status</th>
-                                                <th>Filter Count</th>
+
+                                                <th>Filter SQL</th>
+                                                <th>Enabled</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -99,7 +99,7 @@
                                         </div>
                                     </fieldset>
                                     <div class="form-group">
-                                        <label>Omnibus Connection</label>
+                                        <label>Selects</label>
                                         <select id="connection-cmb" class="form-control">                                           
                                         </select>
                                     </div>
@@ -142,7 +142,7 @@
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <!-- Custom Theme JavaScript -->
-        <script src="modules/reader-module.js"></script>
+        <script src="modules/filter-module.js"></script> 
 
     </body>
 

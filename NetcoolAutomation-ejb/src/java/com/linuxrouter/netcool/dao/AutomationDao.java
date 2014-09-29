@@ -152,4 +152,23 @@ public class AutomationDao {
         AutomationConnection connection = (AutomationConnection) q.getSingleResult();
         return connection;
     }
+
+    public List<AutomationReaderFilter> getAllFilters() {
+        Query q = em.createNamedQuery("AutomationReaderFilter.findAll");
+
+        List<AutomationReaderFilter> list = null;
+        try {
+            list = q.getResultList();
+        } catch (Exception ex) {
+        }
+        return list;
+    }
+
+    public AutomationReaderFilter getFilterByName(String filterName) {
+        Query q = em.createNamedQuery("AutomationReaderFilter.findByFilterName");
+        q.setParameter("filterName", filterName);
+        AutomationReaderFilter connection = (AutomationReaderFilter) q.getSingleResult();
+        return connection;
+    }
+
 }

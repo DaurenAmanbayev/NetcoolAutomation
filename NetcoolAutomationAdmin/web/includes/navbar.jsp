@@ -13,7 +13,7 @@
                 <a href="readers.jsp"><i class="fa fa-gears fa-fw"></i> Readers</a>
             </li>
             <li>
-                <a href="readers.jsp"><i class="fa fa-filter fa-fw"></i> Filters</a>
+                <a href="filter.jsp"><i class="fa fa-filter fa-fw"></i> Filters</a>
             </li>
             <li>
                 <a href="policy-editor.jsp"><i class="fa fa-list-alt fa-fw"></i> Policies</a>
