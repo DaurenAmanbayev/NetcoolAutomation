@@ -109,5 +109,24 @@ Im sorry for my terrible english today, Im tired.
 * Email Sender to send email, every manager like these kind of features.
 * Integration with user created java classes,program,s etc...
 
+## Dependencies
+In order to compile this project you will  need the following jar´s in your classpath:
+ * commons-codec-1.6.jar
+ * commons-configuration-1.9.jar
+ * commons-dbcp2-2.0.1.jar
+ * commons-io-2.1.jar
+ * commons-lang3-3.0.1.jar
+ * commons-logging-1.1.3.jar
+ * commons-net-3.1.jar
+ * commons-pool2-2.2.jar
+ * groovy-all-2.3.6.jar
+ * gson-2.3.jar
+ * guava-18.0.jar
+ * jconn3-6.0.5.jar
+ * log4j-1.2.16.jar
+ * quartz-2.2.1.jar
+ * quartz-jobs-2.2.1.jar
+ * slf4j-api-1.6.6.jar
+ * slf4j-log4j12-1.6.6.jar
 
 ## Deploying the server...
