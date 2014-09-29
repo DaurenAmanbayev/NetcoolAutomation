@@ -9,8 +9,11 @@
             <li>
                 <a href="omnibusconnections.jsp"><i class="fa fa-database fa-fw"></i> Connections</a>
             </li>
-             <li>
+            <li>
                 <a href="readers.jsp"><i class="fa fa-gears fa-fw"></i> Readers</a>
+            </li>
+            <li>
+                <a href="readers.jsp"><i class="fa fa-filter fa-fw"></i> Filters</a>
             </li>
             <li>
                 <a href="policy-editor.jsp"><i class="fa fa-list-alt fa-fw"></i> Policies</a>
