@@ -6,7 +6,7 @@
     <%@include file="includes/default-header.jsp" %>
     <style type="text/css" media="screen">
         #editor {      
-            height: 400px;
+            height: 350px;
         }
     </style>
     <body>
@@ -50,9 +50,9 @@
                                 Script Editor
                             </div>
                             <div class="panel-heading">
-                                <button id="syntax-check-btn" type="button" class="btn btn-default btn-circle"><i class="fa fa-check"></i></button>
+                                <!-- <button id="syntax-check-btn" type="button" class="btn btn-default btn-circle"><i class="fa fa-check"></i></button> -->
                                 <button id="save-btn" type="button" class="btn btn-primary btn-circle"><i class="fa fa-save"></i></button>
-                             
+
                             </div>
                             <!-- /.panel-heading -->
                             <div class="panel-body">
@@ -68,7 +68,51 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Script Editor
+                            </div>
 
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label>Filter</label>
+                                            <select id="filter-cmb" class="form-control">
+                                               
+                                            </select>
+                                        </div></div>
+                                    <div class="col-lg-4">
+
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <div id="policy-enable-div" class="checkbox">
+                                                <label>
+                                                    <input id="policy-enabled" type="checkbox" value="">Enabled
+                                                </label>
+                                            </div>                                        
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-4">
+
+                                        <div class="form-group" style=" padding-top: 20px;">                                       
+                                            <button id="save-policy-data" type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
                 <!-- /.row -->
             </div>
             <!-- /#page-wrapper -->

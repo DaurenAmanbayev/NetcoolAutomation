@@ -54,7 +54,7 @@
                                                 <th>Username</th>
                                                 <th>Status</th>
                                                 <th>Reader Count</th>
-                                                <th>Policy Count</th>
+                                               
                                                 <th>Action</th>
                                             </tr>
                                         </thead>

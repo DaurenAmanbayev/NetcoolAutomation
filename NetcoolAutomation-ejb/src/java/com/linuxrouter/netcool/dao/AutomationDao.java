@@ -171,4 +171,10 @@ public class AutomationDao {
         return connection;
     }
 
+    public List<AutomationPolicies> getAllPolicies() {
+        Query q= em.createNamedQuery("AutomationPolicies.findAll");
+        List<AutomationPolicies> policies = q.getResultList();
+        return policies;
+    }
+
 }

@@ -31,7 +31,9 @@ import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
 import org.apache.commons.dbcp2.PoolableConnection;
 import org.apache.commons.dbcp2.PoolableConnectionFactory;
 import org.apache.commons.dbcp2.PoolingDataSource;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.log4j.Logger;
@@ -182,8 +184,8 @@ public class OmniClient {
                         }
                     }
                 }
-
-                String updateSql = "UPDATE alerts.status set " + StringUtils.join(campoValor, ", ") + " where Serial = " + serial + ";";
+                serial= serial.replace("'", "''");
+                String updateSql = "UPDATE alerts.status set " + StringUtils.join(campoValor, ", ") + " where Identifier = " + serial + ";";
                 logger.debug("Query: " + updateSql);
                 st.addBatch(updateSql);
             }

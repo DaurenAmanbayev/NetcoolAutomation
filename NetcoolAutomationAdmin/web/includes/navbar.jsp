@@ -15,8 +15,9 @@
             <li>
                 <a href="filter.jsp"><i class="fa fa-filter fa-fw"></i> Filters</a>
             </li>
-            <li>
-                <a href="policy-editor.jsp?name=POWER_POLICY"><i class="fa fa-list-alt fa-fw"></i> Policies</a>
+           
+             <li>
+                <a href="policy-list.jsp"><i class="fa fa-list-alt fa-fw"></i> Policies</a>
             </li>
         </ul>
     </div>

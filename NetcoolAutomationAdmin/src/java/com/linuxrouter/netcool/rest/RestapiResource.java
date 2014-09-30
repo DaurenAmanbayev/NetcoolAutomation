@@ -164,7 +164,22 @@ public class RestapiResource {
     @POST
     @Produces("application/json")
     @Path("poilicy/{name}/update")
-    public String updatePolicyScript(@PathParam("name") String policeName,@FormParam("script") String script) {
-        return converter.convert2Json(automationSession.updatePolicyScript(policeName,script));
+    public String updatePolicyScript(@PathParam("name") String policeName, @FormParam("script") String script) {
+        return converter.convert2Json(automationSession.updatePolicyScript(policeName, script));
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("policy/list")
+    public String getAllPolicies() {
+        return converter.convert2Json(automationSession.getallPolicies());
+    }
+
+    @POST
+    @Produces("application/json")
+    @Path("policy/{name}/reader/update")
+    public String updatePolicyReaderAndStatus(@PathParam("name") String policeName,
+            @FormParam("filter") String filter, @FormParam("enabled") String enable) {
+        return converter.convert2Json(automationSession.setPolicyFilterAndStatusByName(policeName, filter, enable));
     }
 }

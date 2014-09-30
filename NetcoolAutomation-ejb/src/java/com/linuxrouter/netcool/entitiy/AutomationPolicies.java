@@ -61,7 +61,7 @@ public class AutomationPolicies implements Serializable {
     private String logging;
     @JoinColumn(name = "FILTER_NAME", referencedColumnName = "FILTER_NAME")
     @ManyToOne(optional = false)
-    @Expose(serialize = false)
+    @Expose(serialize = true)
     private AutomationReaderFilter filterName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "policyName")
     private List<PolicyHistory> policyHistoryList;

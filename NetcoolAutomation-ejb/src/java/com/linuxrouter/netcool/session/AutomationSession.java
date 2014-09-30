@@ -65,7 +65,7 @@ public class AutomationSession {
      * @param script
      * @return
      */
-    public BasicResponse updatePolicyScript( String policyName, String script) {
+    public BasicResponse updatePolicyScript(String policyName, String script) {
         BasicResponse response = new BasicResponse();
         logger.debug("Getting policy: >" + policyName);
         try {
@@ -228,4 +228,33 @@ public class AutomationSession {
         return response;
     }
     
+    public BasicResponse getallPolicies() {
+        BasicResponse response = new BasicResponse();
+        try {
+            response.setPayLoad(automationDao.getAllPolicies());
+            response.setSuccess(true);
+        } catch (Exception ex) {
+            
+        }
+        
+        return response;
+    }
+    
+    public BasicResponse setPolicyFilterAndStatusByName(String policyName, String filterName, String enabled) {
+        BasicResponse response = new BasicResponse();
+        logger.debug("Update:: " + policyName + " Ena:" + enabled + " Filter: " + filterName);
+        try {
+            AutomationPolicies policy = automationDao.getPolicyByName(policyName);
+            policy.setEnabled(enabled);
+            AutomationReaderFilter filter = automationDao.getFilterByName(filterName);
+            policy.setFilterName(filter);
+            automationDao.updatePolicy(policy);
+            response.setSuccess(true);
+            response.setPayLoad(policy);
+            
+        } catch (Exception ex) {
+            
+        }
+        return response;
+    }
 }

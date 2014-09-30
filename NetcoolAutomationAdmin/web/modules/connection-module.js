@@ -50,7 +50,7 @@ ConnectionInterface = function () {
                             html += ' <td>' + connectionUsername + '</td>';
                             html += ' <td>' + enabledFlag + '</td>';
                             html += ' <td>' + readerCount + '</td>';
-                            html += ' <td>' + policyCount + '</td>';
+                          //  html += ' <td>' + policyCount + '</td>';
                             html += ' <td> <button type="button" class="btn btn-primary edit-connection" data-toggle="modal" data-target="#connection-detail" data-connection-name= "' + connectionName + '">Edit</button></td>';
                             html += '</tr>';
                         }
