@@ -41,6 +41,9 @@ public class JobManagerBean {
     @EJB
     private AutomationDao automationDao;
 
+    @EJB
+    private QueryUtils queryUtils;
+    
     private HashMap<String, JobKey> jobMap = new HashMap<>();
 
     @PostConstruct
@@ -85,7 +88,7 @@ public class JobManagerBean {
         // map.put(AutomationConstants.DBPOOL, omniclient.getPoolingConnectionByName(reader.getConnectionName().getConnectionName()));
         map.put(AutomationConstants.READER_CONNECTION_NAME, reader.getConnectionName().getConnectionName());
         map.put(AutomationConstants.OMNICLIENT, omniclient);
-
+        map.put(AutomationConstants.QUERY_UTILS, queryUtils);
         map.put(AutomationConstants.AUTOMATIONDAO, automationDao);
         JobDetail det = JobManager.commitNewJob(reader.getReaderName(), reader.getCronInterval(), ScriptJob.class, map);
         jobMap.put(reader.getReaderName(), det.getKey());

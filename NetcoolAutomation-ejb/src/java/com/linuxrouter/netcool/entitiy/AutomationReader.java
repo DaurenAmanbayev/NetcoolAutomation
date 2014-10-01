@@ -38,6 +38,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AutomationReader.findByEnabled", query = "SELECT a FROM AutomationReader a WHERE a.enabled = :enabled"),
     @NamedQuery(name = "AutomationReader.findByLogging", query = "SELECT a FROM AutomationReader a WHERE a.logging = :logging"),})
 public class AutomationReader implements Serializable {
+    @Column(name = "ENABLED")
+    private String enabled;
+    @Column(name = "LOGGING")
+    private String logging;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,10 +53,6 @@ public class AutomationReader implements Serializable {
     @Size(max = 20)
     @Column(name = "CRON_INTERVAL")
     private String cronInterval;
-    @Column(name = "ENABLED")
-    private String enabled;
-    @Column(name = "LOGGING")
-    private String logging;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "readerName")
     private List<AutomationReaderFilter> automationReaderFilterList;
@@ -92,21 +92,6 @@ public class AutomationReader implements Serializable {
         this.cronInterval = cronInterval;
     }
 
-    public String getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(String enabled) {
-        this.enabled = enabled;
-    }
-
-    public String getLogging() {
-        return logging;
-    }
-
-    public void setLogging(String logging) {
-        this.logging = logging;
-    }
 
     @XmlTransient
     public List<AutomationReaderFilter> getAutomationReaderFilterList() {
@@ -165,6 +150,22 @@ public class AutomationReader implements Serializable {
     @Override
     public String toString() {
         return "com.linuxrouter.netcool.entitiy.AutomationReader[ readerName=" + readerName + " ]";
+    }
+
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getLogging() {
+        return logging;
+    }
+
+    public void setLogging(String logging) {
+        this.logging = logging;
     }
 
 }

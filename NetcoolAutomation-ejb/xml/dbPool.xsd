@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 rel. 3 sp1 (http://www.altova.com) by Rafael R. (Global Village Telecom Ltda) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:element name="configuration">
+        <xs:annotation>
+            <xs:documentation>Comment describing your root element</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:sequence maxOccurs="unbounded">
+                    <xs:element name="dbPool">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="poolName" type="xs:string"/>
+                                <xs:element name="dbPass" type="xs:string"/>
+                                <xs:element name="poolSize" type="xs:integer"/>
+                                <xs:element name="dbUser" type="xs:string"/>
+                                <xs:element name="jdbcUrl" type="xs:string"/>
+                                <xs:element name="driverClassName" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -39,6 +39,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AutomationReaderFilter.findByEnabled", query = "SELECT a FROM AutomationReaderFilter a WHERE a.enabled = :enabled"),
     @NamedQuery(name = "AutomationReaderFilter.findByStateChange", query = "SELECT a FROM AutomationReaderFilter a WHERE a.stateChange = :stateChange")})
 public class AutomationReaderFilter implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1)
+    @Column(name = "PERSIST_STATE")
+    private String persistState;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -153,6 +158,14 @@ public class AutomationReaderFilter implements Serializable {
     @Override
     public String toString() {
         return "com.linuxrouter.netcool.entitiy.AutomationReaderFilter[ filterName=" + filterName + " ]";
+    }
+
+    public String getPersistState() {
+        return persistState;
+    }
+
+    public void setPersistState(String persistState) {
+        this.persistState = persistState;
     }
 
 }

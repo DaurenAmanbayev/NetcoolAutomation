@@ -1,5 +1,6 @@
 package com.linuxrouter.netcool.client;
 
+import com.linuxrouter.netcool.configuration.AutomationConstants;
 import com.linuxrouter.netcool.dao.AutomationDao;
 import com.linuxrouter.netcool.entitiy.AutomationConnection;
 import com.linuxrouter.netcool.entitiy.AutomationReader;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 
@@ -83,11 +85,23 @@ public class OmniClient {
                 logger.error("Failed to create an instance of SybDriver...", ex);
             }
 
-            ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(url, user, pass);
+            Properties props = new Properties();
+            props.put("REPEAT_READ", "false"); 
+            props.put("USE_METADATA", "false");
+            props.put("JCONNECT_VERSION", "6");
+            props.put("APPLICATIONNAME",AutomationConstants.AUTOMATIONNAME);
+            props.put("URL",url);
+            props.put("Password",pass);
+            props.put("User",user);
+             
+            //ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(url, user, pass);
+            ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(url, props);
+
             PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
             ObjectPool<PoolableConnection> cp = new GenericObjectPool<>(poolableConnectionFactory);
             poolableConnectionFactory.setPool(cp);
             PoolingDataSource<PoolableConnection> pds = new PoolingDataSource<>(cp);
+
             poolingDataSource.put(name, pds);
             connectionPool.put(name, cp);
             logger.debug("Configured: " + name + " At Omnit bus pool");
@@ -120,12 +134,17 @@ public class OmniClient {
 
     }
 
-    public ArrayList<EventMap> executeQuery(String filter, String connName, AutomationReaderFilter readerFilter) {
+    public ArrayList<EventMap> executeQuery(String filter, String connName, AutomationReaderFilter readerFilter, Boolean hasState) {
         ArrayList<EventMap> list = new ArrayList<>();
-        logger.debug("Executing Query on:" + connName);
+        //logger.debug("Executing Query on:" + connName);
 
-        String sql = "select * from alerts.status where 1=1 and StateChange >  " + readerFilter.getStateChange() + " and " + filter + " order by StateChange ";
-        logger.debug("SQL:::" + sql);
+        String sql = "select * from alerts.status where 1=1";
+        if (hasState) {
+            sql += " and StateChange >  " + readerFilter.getStateChange() + " and " + filter + " order by StateChange ";
+        } else {
+            sql += " and " + filter + " order by StateChange ";
+        }
+        //logger.debug("SQL:::" + sql);
         try {
 
             Connection omniBusConnection = poolingDataSource.get(connName).getConnection();
@@ -151,8 +170,8 @@ public class OmniClient {
             st.close();
             omniBusConnection.close();
             Long endTime = System.currentTimeMillis();
-            logger.debug("Done Query Time Took: " + (endTime - startTime) + " ms");
-            logger.debug("Query : " + sql);
+//            logger.debug("Done Query Time Took: " + (endTime - startTime) + " ms");
+//            logger.debug("Query : " + sql);
             logger.debug("Result Count : " + resultCount);
         } catch (SQLException ex) {
             logger.error("Failed to execute sql", ex);
@@ -184,9 +203,10 @@ public class OmniClient {
                         }
                     }
                 }
-                serial= serial.replace("'", "''");
-                String updateSql = "UPDATE alerts.status set " + StringUtils.join(campoValor, ", ") + " where Identifier = " + serial + ";";
-                logger.debug("Query: " + updateSql);
+                serial = serial.replace("'", "''");
+                //logger.debug("Identifier Is: [" + serial + "]");
+                String updateSql = "UPDATE alerts.status set " + StringUtils.join(campoValor, ", ") + " where Serial = " + serial + ";";
+                // logger.debug("Query: " + updateSql);
                 st.addBatch(updateSql);
             }
             st.executeBatch();

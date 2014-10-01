@@ -10,6 +10,7 @@ import com.linuxrouter.netcool.entitiy.AutomationPolicies;
 import com.linuxrouter.netcool.entitiy.AutomationReader;
 import com.linuxrouter.netcool.entitiy.AutomationReaderFilter;
 import com.linuxrouter.netcool.entitiy.AutomationUsers;
+import com.linuxrouter.netcool.entitiy.DbConnections;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
@@ -172,9 +173,15 @@ public class AutomationDao {
     }
 
     public List<AutomationPolicies> getAllPolicies() {
-        Query q= em.createNamedQuery("AutomationPolicies.findAll");
+        Query q = em.createNamedQuery("AutomationPolicies.findAll");
         List<AutomationPolicies> policies = q.getResultList();
         return policies;
+    }
+
+    public List<DbConnections> getAllDbConnections() {
+        Query q = em.createNamedQuery("DbConnections.findAll");
+        List<DbConnections> connections = q.getResultList();
+        return connections;
     }
 
 }

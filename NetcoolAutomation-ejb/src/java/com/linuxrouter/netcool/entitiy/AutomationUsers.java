@@ -37,6 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AutomationUsers.findByEmail", query = "SELECT a FROM AutomationUsers a WHERE a.email = :email"),
     @NamedQuery(name = "AutomationUsers.findByEnabled", query = "SELECT a FROM AutomationUsers a WHERE a.enabled = :enabled")})
 public class AutomationUsers implements Serializable {
+    @Column(name = "ENABLED")
+    private String enabled;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -54,8 +56,6 @@ public class AutomationUsers implements Serializable {
     @Size(max = 255)
     @Column(name = "EMAIL")
     private String email;
-    @Column(name = "ENABLED")
-    private String enabled;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
     @Expose(serialize = false)
     private List<AutomationReader> automationReaderList;
@@ -99,13 +99,6 @@ public class AutomationUsers implements Serializable {
         this.email = email;
     }
 
-    public String getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(String enabled) {
-        this.enabled = enabled;
-    }
 
     @XmlTransient
     public List<AutomationReader> getAutomationReaderList() {
@@ -139,6 +132,14 @@ public class AutomationUsers implements Serializable {
     @Override
     public String toString() {
         return "com.linuxrouter.netcool.entitiy.AutomationUsers[ login=" + login + " ]";
+    }
+
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
     }
     
 }

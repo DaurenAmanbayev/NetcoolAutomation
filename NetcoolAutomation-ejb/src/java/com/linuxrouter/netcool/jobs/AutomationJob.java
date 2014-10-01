@@ -9,6 +9,7 @@ import com.linuxrouter.netcool.client.OmniClient;
 import com.linuxrouter.netcool.configuration.AutomationConstants;
 import com.linuxrouter.netcool.dao.AutomationDao;
 import com.linuxrouter.netcool.entitiy.AutomationPolicies;
+import com.linuxrouter.netcool.session.QueryUtils;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,6 +47,8 @@ public abstract class AutomationJob implements Job {
 
     protected AutomationDao automationDao;
 
+    protected QueryUtils queryUtils;
+
     /**
      * Executes a Job Context...
      *
@@ -61,6 +64,7 @@ public abstract class AutomationJob implements Job {
         this.readerConnName = (String) jec.getJobDetail().getJobDataMap().get(AutomationConstants.READER_CONNECTION_NAME);
         this.omniBusConnection = omniClient.getPoolingConnectionByName(readerConnName);
         this.automationDao = (AutomationDao) jec.getJobDetail().getJobDataMap().get(AutomationConstants.AUTOMATIONDAO);
+        this.queryUtils = (QueryUtils) jec.getJobDetail().getJobDataMap().get(AutomationConstants.QUERY_UTILS);
         //this.connectionMap = (HashMap<String, Connection>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.CONNECTION_HASH);
         logger = Logger.getLogger(this.policyName);
         logger.debug("Starting : " + this.policyName);
@@ -85,7 +89,7 @@ public abstract class AutomationJob implements Job {
         }
 
         Long endTime = System.currentTimeMillis();
-        logger.debug("Done All Script:" + this.policyName + " Time Took: " + (endTime - startTime) + " ms");
+        logger.debug("Done Reader:" + this.policyName + " Time Took: " + (endTime - startTime) + " ms");
     }
 
     /**

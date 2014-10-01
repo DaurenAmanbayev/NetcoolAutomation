@@ -69,7 +69,7 @@ FilterIinterface = function () {
                 type: "get",
                 dataType: "json",
                 async: false,
-                url: "webresources/restapi/reader/byfilter//" + readerName,
+                url: "webresources/restapi/reader/byfilter/" + readerName,
                 success: function (response) {
                     if (response.success) {
 
