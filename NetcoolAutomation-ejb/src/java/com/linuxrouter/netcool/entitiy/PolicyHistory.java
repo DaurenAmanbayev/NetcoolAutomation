@@ -5,6 +5,7 @@
  */
 package com.linuxrouter.netcool.entitiy;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -44,6 +45,7 @@ public class PolicyHistory implements Serializable {
     private Integer executionTime;
     @JoinColumn(name = "POLICY_NAME", referencedColumnName = "POLICY_NAME")
     @ManyToOne(optional = false)
+    @Expose(serialize = false)
     private AutomationPolicies policyName;
 
     public PolicyHistory() {

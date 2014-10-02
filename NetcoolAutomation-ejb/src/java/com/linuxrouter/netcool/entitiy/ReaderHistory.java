@@ -5,6 +5,7 @@
  */
 package com.linuxrouter.netcool.entitiy;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -53,6 +54,7 @@ public class ReaderHistory implements Serializable {
     private String histText;
     @JoinColumn(name = "READER_NAME", referencedColumnName = "READER_NAME")
     @ManyToOne(optional = false)
+    @Expose(serialize = false)
     private AutomationReader readerName;
 
     public ReaderHistory() {

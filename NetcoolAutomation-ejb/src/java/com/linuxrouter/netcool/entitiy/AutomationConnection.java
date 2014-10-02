@@ -5,6 +5,7 @@
  */
 package com.linuxrouter.netcool.entitiy;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -27,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "AUTOMATION_CONNECTION")
-@XmlRootElement
+@XmlRootElement 
 @NamedQueries({
     @NamedQuery(name = "AutomationConnection.findAll", query = "SELECT a FROM AutomationConnection a"),
     @NamedQuery(name = "AutomationConnection.findByConnectionName", query = "SELECT a FROM AutomationConnection a WHERE a.connectionName = :connectionName"),
@@ -36,6 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AutomationConnection.findByJdbcUrl", query = "SELECT a FROM AutomationConnection a WHERE a.jdbcUrl = :jdbcUrl"),
     @NamedQuery(name = "AutomationConnection.findByEnabled", query = "SELECT a FROM AutomationConnection a WHERE a.enabled = :enabled")})
 public class AutomationConnection implements Serializable {
+    @Column(name = "ENABLED")
+    private String enabled;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -49,12 +52,11 @@ public class AutomationConnection implements Serializable {
     @Size(max = 255)
     @Column(name = "PASSWORD")
     private String password;
-    @Size(max = 20)
+    @Size(max = 255)
     @Column(name = "JDBC_URL")
     private String jdbcUrl;
-    @Column(name = "ENABLED")
-    private String enabled;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "connectionName")
+   
     private List<AutomationReader> automationReaderList;
 
     public AutomationConnection() {
@@ -96,13 +98,6 @@ public class AutomationConnection implements Serializable {
         this.jdbcUrl = jdbcUrl;
     }
 
-    public String getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(String enabled) {
-        this.enabled = enabled;
-    }
 
     @XmlTransient
     public List<AutomationReader> getAutomationReaderList() {
@@ -136,6 +131,14 @@ public class AutomationConnection implements Serializable {
     @Override
     public String toString() {
         return "com.linuxrouter.netcool.entitiy.AutomationConnection[ connectionName=" + connectionName + " ]";
+    }
+
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
     }
     
 }

@@ -5,6 +5,7 @@
  */
 package com.linuxrouter.netcool.entitiy;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -18,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -38,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AutomationPolicies.findByExecutionOrder", query = "SELECT a FROM AutomationPolicies a WHERE a.executionOrder = :executionOrder"),
     @NamedQuery(name = "AutomationPolicies.findByLogging", query = "SELECT a FROM AutomationPolicies a WHERE a.logging = :logging")})
 public class AutomationPolicies implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -56,9 +59,10 @@ public class AutomationPolicies implements Serializable {
     private Integer executionOrder;
     @Column(name = "LOGGING")
     private String logging;
-    @JoinColumn(name = "READER_NAME", referencedColumnName = "READER_NAME")
+    @JoinColumn(name = "FILTER_NAME", referencedColumnName = "FILTER_NAME")
     @ManyToOne(optional = false)
-    private AutomationReader readerName;
+    @Expose(serialize = true)
+    private AutomationReaderFilter filterName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "policyName")
     private List<PolicyHistory> policyHistoryList;
 
@@ -109,12 +113,12 @@ public class AutomationPolicies implements Serializable {
         this.logging = logging;
     }
 
-    public AutomationReader getReaderName() {
-        return readerName;
+    public AutomationReaderFilter getFilterName() {
+        return filterName;
     }
 
-    public void setReaderName(AutomationReader readerName) {
-        this.readerName = readerName;
+    public void setFilterName(AutomationReaderFilter filterName) {
+        this.filterName = filterName;
     }
 
     @XmlTransient
@@ -150,5 +154,5 @@ public class AutomationPolicies implements Serializable {
     public String toString() {
         return "com.linuxrouter.netcool.entitiy.AutomationPolicies[ policyName=" + policyName + " ]";
     }
-    
+
 }

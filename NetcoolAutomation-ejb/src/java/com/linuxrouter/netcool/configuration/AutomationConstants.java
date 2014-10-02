@@ -21,4 +21,6 @@ public class AutomationConstants {
     public static final String POLICIES = "POLICIES";
     public static final String READER_CONNECTION_NAME = "AFASDSADS";
     public static final String AUTOMATIONDAO = "automationada";
+    public static final String AUTOMATIONNAME = "NISHI-IMPACT-AUTOMATION";
+    public static final String QUERY_UTILS = "queryUtils";
 }

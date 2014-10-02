@@ -9,6 +9,7 @@ import com.linuxrouter.netcool.client.OmniClient;
 import com.linuxrouter.netcool.configuration.AutomationConstants;
 import com.linuxrouter.netcool.dao.AutomationDao;
 import com.linuxrouter.netcool.entitiy.AutomationPolicies;
+import com.linuxrouter.netcool.session.QueryUtils;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,12 +40,14 @@ public abstract class AutomationJob implements Job {
     protected HashMap<String, Connection> connectionMap = null;
     protected Logger logger = null;
     protected OmniClient omniClient = null;
-    protected String sqlReader = "";
+
     protected String groovyScript = "";
-    protected List<AutomationPolicies> policies = new ArrayList<>();
+
     protected String readerConnName = "";
 
     protected AutomationDao automationDao;
+
+    protected QueryUtils queryUtils;
 
     /**
      * Executes a Job Context...
@@ -55,12 +58,13 @@ public abstract class AutomationJob implements Job {
     @Override
     public void execute(JobExecutionContext jec) throws JobExecutionException {
         this.policyName = jec.getJobDetail().getJobDataMap().getString(AutomationConstants.JOBNAME);
-        this.omniBusConnection = (PoolingDataSource<PoolableConnection>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.DBPOOL);
+
         this.omniClient = (OmniClient) jec.getJobDetail().getJobDataMap().get(AutomationConstants.OMNICLIENT);
-        this.sqlReader = (String) jec.getJobDetail().getJobDataMap().get(AutomationConstants.SQL_TEXT);
+
         this.readerConnName = (String) jec.getJobDetail().getJobDataMap().get(AutomationConstants.READER_CONNECTION_NAME);
-        this.policies = (List<AutomationPolicies>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.POLICIES);
+        this.omniBusConnection = omniClient.getPoolingConnectionByName(readerConnName);
         this.automationDao = (AutomationDao) jec.getJobDetail().getJobDataMap().get(AutomationConstants.AUTOMATIONDAO);
+        this.queryUtils = (QueryUtils) jec.getJobDetail().getJobDataMap().get(AutomationConstants.QUERY_UTILS);
         //this.connectionMap = (HashMap<String, Connection>) jec.getJobDetail().getJobDataMap().get(AutomationConstants.CONNECTION_HASH);
         logger = Logger.getLogger(this.policyName);
         logger.debug("Starting : " + this.policyName);
@@ -85,7 +89,7 @@ public abstract class AutomationJob implements Job {
         }
 
         Long endTime = System.currentTimeMillis();
-        logger.debug("Done All Script:" + this.policyName + " Time Took: " + (endTime - startTime) + " ms");
+        logger.debug("Done Reader:" + this.policyName + " Time Took: " + (endTime - startTime) + " ms");
     }
 
     /**
