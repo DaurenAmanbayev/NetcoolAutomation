@@ -6,7 +6,7 @@
     <%@include file="includes/default-header.jsp" %>
     <style type="text/css" media="screen">
         #editor {      
-            height: 350px;
+            height: 450px;
         }
     </style>
     <body>
@@ -56,9 +56,9 @@
                             </div>-->
                             <!-- /.panel-heading -->
                             <div class="panel-body">
-                                <div class="table-responsive">
+                               
                                     <div id="editor"></div>  
-                                </div>
+                             
                                 <!-- /.table-responsive -->
 
                             </div>
