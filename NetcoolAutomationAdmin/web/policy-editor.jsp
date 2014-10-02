@@ -49,11 +49,11 @@
                             <div class="panel-heading">
                                 Script Editor
                             </div>
-                            <div class="panel-heading">
-                                <!-- <button id="syntax-check-btn" type="button" class="btn btn-default btn-circle"><i class="fa fa-check"></i></button> -->
+                            <!--  <div class="panel-heading">
+                                <!-- <button id="syntax-check-btn" type="button" class="btn btn-default btn-circle"><i class="fa fa-check"></i></button> 
                                 <button id="save-btn" type="button" class="btn btn-primary btn-circle"><i class="fa fa-save"></i></button>
 
-                            </div>
+                            </div>-->
                             <!-- /.panel-heading -->
                             <div class="panel-body">
                                 <div class="table-responsive">

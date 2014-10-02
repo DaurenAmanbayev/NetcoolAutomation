@@ -68,7 +68,7 @@ public class QueryUtils {
             st.close();
             //con.close();
             Long end = System.currentTimeMillis();
-            logger.debug("Query on external DB took: " + (end - start) + "ms");
+            //logger.debug("Query on external DB took: " + (end - start) + "ms");
         } catch (SQLException ex) {
             logger.error("Erro ao executar query:", ex);
         }
@@ -93,6 +93,7 @@ public class QueryUtils {
             st.close();
         } catch (SQLException ex) {
             logger.error("Erro ao executar query:", ex);
+            return false;
         }
         Long end = System.currentTimeMillis();
         return true;

@@ -5,14 +5,16 @@ PolicyEditor = function () {
             PolicyEditor.populateFilterCmb();
             PolicyEditor.initEditor();
             PolicyEditor.loadPolicy();
-            PolicyEditor.saveScript();
+
             PolicyEditor.saveConnectionData();
 
         },
         saveConnectionData: function () {
+
             $("#save-policy-data").click(function () {
                 logger.debug("Saving...");
-                var filterName = $("#filter-cmb").val();              
+                PolicyEditor.saveScript();
+                var filterName = $("#filter-cmb").val();
                 var policyEnabled = "N";
                 if ($("#policy-enabled").prop('checked')) {
                     policyEnabled = "Y";
@@ -96,24 +98,21 @@ PolicyEditor = function () {
             });
         },
         saveScript: function () {
-            $("#save-btn").click(function () {
-                logger.debug("Saving Script " + policyName);
-                $.ajax({
-                    type: "post",
-                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                    dataType: "json",
-                    //webresources/restapi/reader/ALL_EVENTS
-                    url: "webresources/restapi/poilicy/" + policyName + "/update",
-                    data: {
-                        script: editor.getValue()
+            $.ajax({
+                type: "post",
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "json",
+                //webresources/restapi/reader/ALL_EVENTS
+                url: "webresources/restapi/poilicy/" + policyName + "/update",
+                data: {
+                    script: editor.getValue()
 
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            logger.debug("Connection Data Updated Success");
-                        }
+                },
+                success: function (response) {
+                    if (response.success) {
+                        logger.debug("Connection Data Updated Success");
                     }
-                });
+                }
             });
         }
     };
