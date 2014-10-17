@@ -4,7 +4,18 @@ ConnectionInterface = function () {
             ConnectionInterface.loadConnections();
             ConnectionInterface.refreshOnClose();
             ConnectionInterface.saveConnection();
-
+            ConnectionInterface.addlisteners();
+        },
+        addlisteners: function () {
+            $("#add-connection-btn").click(function () {
+                $('#connection-name').removeAttr('disabled');
+                $("#connection-name").val("");
+                $("#connection-user").val("");
+                $("#connection-pass").val("");
+                $("#connection-url").val("");
+                $("#connection-enabled").prop('checked', false);
+                $("#connection-enabled").prop('value', "N");
+            });
         },
         loadConnections: function () {
             logger.debug("Reading connection list");
@@ -50,7 +61,7 @@ ConnectionInterface = function () {
                             html += ' <td>' + connectionUsername + '</td>';
                             html += ' <td>' + enabledFlag + '</td>';
                             html += ' <td>' + readerCount + '</td>';
-                          //  html += ' <td>' + policyCount + '</td>';
+                            //  html += ' <td>' + policyCount + '</td>';
                             html += ' <td> <button type="button" class="btn btn-primary edit-connection" data-toggle="modal" data-target="#connection-detail" data-connection-name= "' + connectionName + '">Edit</button></td>';
                             html += '</tr>';
                         }
@@ -62,6 +73,7 @@ ConnectionInterface = function () {
             });
         },
         clickEditButton: function () {
+            $('#connection-name').attr('disabled', 'disabled');
             $(".edit-connection").click(function () {
                 logger.debug("Edit Connection Name: " + $(this).data('connection-name'));
                 //Popula o form

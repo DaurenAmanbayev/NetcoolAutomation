@@ -9,33 +9,48 @@ import com.linuxrouter.netcool.client.EventMap;
 import com.linuxrouter.netcool.entitiy.AutomationPolicies;
 import com.linuxrouter.netcool.entitiy.AutomationReader;
 import com.linuxrouter.netcool.entitiy.AutomationReaderFilter;
+import com.linuxrouter.netcool.log.AutomationLogAppender;
+import com.linuxrouter.netcool.plugin.AutomationPluginInterface;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.codehaus.groovy.control.CompilationFailedException;
+import org.quartz.DisallowConcurrentExecution;
 
 /**
  *
  * @author lucas
  */
+@DisallowConcurrentExecution
 public class ScriptJob extends AutomationJob {
-    
+
     private final Logger logger = Logger.getLogger(ScriptJob.class);
-    
+
+    private void configurePolicyLogger(String policy) {
+        //[%5p] %d{dd-MMM-yyyy HH:mm:ss} 
+
+    }
+
     @Override
     public void executeContext(Connection con) {
         // Execution Context
+        AutomationLogAppender myScriptLogger = new AutomationLogAppender(loggerSocket);
+        myScriptLogger.setLayout(new PatternLayout("[%5p] %d{dd-MMM-yyyy HH:mm:ss} (ScriptContext:" + this.policyName + ") - %m"));
+        logger.addAppender(myScriptLogger);
         Long mainStart = System.currentTimeMillis();
         AutomationReader reader = automationDao.getReaderByName(this.policyName);
 
         //for each filter in thre reader...validate is filter has filters...
         if (reader.getAutomationReaderFilterList() != null && reader.getAutomationReaderFilterList().size() > 0) {
-            
+
             for (AutomationReaderFilter filter : reader.getAutomationReaderFilterList()) {
-                
+
                 if (filter.getEnabled().equalsIgnoreCase("Y")) {
                     Boolean persistState = false;
                     if (filter.getPersistState().equalsIgnoreCase("Y")) {
@@ -48,22 +63,54 @@ public class ScriptJob extends AutomationJob {
                         for (EventMap e : events) {
                             e.setChangedMap(changedEvents);
                         }
-                        
+
                         Integer stateChanged = Integer.parseInt((String) events.get(events.size() - 1).get("StateChange"));
                         Long afterMap = System.currentTimeMillis();
-                        // logger.debug("Map Took: " + (afterMap - beforeMap) + " ms");
-                        Logger policyLogger = Logger.getLogger(policyName);
-                        Binding binding = new Binding();
-                        binding.setVariable("q", queryUtils);
-                        binding.setVariable("events", events);
-                        binding.setVariable("logger", policyLogger);
 
-                        //in the future expose plugins registered from here...
                         try {
-                            
-                            GroovyShell shell = new GroovyShell(binding);
-                            
+
                             for (AutomationPolicies p : filter.getAutomationPoliciesList()) {
+
+                                Logger policyLogger = Logger.getLogger(AutomationPolicies.class);
+
+                                String pattern = "[%5p] %d{dd-MMM-yyyy HH:mm:ss} (Reader:" + this.policyName + " Policy:" + p.getPolicyName() + ") - %m";
+                                AutomationLogAppender appender = new AutomationLogAppender(loggerSocket);
+                                appender.setLayout(new PatternLayout(pattern));
+                                policyLogger.addAppender(appender);
+                                Binding binding = new Binding();
+                                
+                                binding.setVariable("q", queryUtils);
+                                binding.setVariable("events", events);
+                                binding.setVariable("logger", policyLogger);
+                                binding.setVariable("filterName", filter.getFilterName());
+                                binding.setVariable("omniSql", omniClient);
+
+                                
+                                binding.setVariable("plugins", pluginManager.getPluginsImpl());
+//                                if (plugins != null) {
+//                                    
+//                                    logger.debug("Got Plugins:" + plugins.size());
+//                                    Long pluginStartTime = System.currentTimeMillis();
+////                                    Iterator it = plugins.entrySet().iterator();
+////
+////                                    while (it.hasNext()) {
+////                                        try {
+////                                            Map.Entry pairs = (Map.Entry) it.next();
+////                                            AutomationPluginInterface plugin = plugins.get(pairs.getKey());
+////
+////                                            binding.setVariable(plugin.getPluginAlias(), plugin.getPluginImpl());
+////                                            logger.debug("Ok Registering new plugin with Alias: [" + plugin.getPluginAlias() + "]");
+////                                        } catch (Exception pluginEx) {
+////                                            logger.error("Failed to create plugin");
+////                                        }
+////                                    }
+//                                    Long pluginEndTime = System.currentTimeMillis();
+//                                    logger.debug("Plugin time was::: " + (pluginEndTime - pluginStartTime) + "[ms]");
+//                                } else {
+//                                    logger.debug("No plugin Found");
+//                                }
+
+                                GroovyShell shell = new GroovyShell(binding);
                                 if (p.getEnabled().equalsIgnoreCase("Y")) {
                                     Long startTime = System.currentTimeMillis();
                                     try {
@@ -76,17 +123,19 @@ public class ScriptJob extends AutomationJob {
                                     //logger.debug("Groovy Script[" + p.getPolicyName() + "] Execution Time: " + (endTime - startTime) + "ms");
                                     // logger.debug("Changed Events Size is: " + changedEvents.size());
                                 }
+                                policyLogger.removeAppender(appender);
                             }
-                            
+
                         } catch (Exception ex) {
                             logger.error("fail to execute script at job: " + this.readerConnName, ex);
                         }
                         if (changedEvents != null && changedEvents.size() > 0) {
-                            omniClient.commitChangedEvents(changedEvents, this.readerConnName);
+                            omniClient.commitChangedEvents(changedEvents, reader);
                         }
-                        
+
                         filter.setStateChange(stateChanged);
                         //automationDao.saveReaderStatus(reader);
+
                         Long mainEnd = System.currentTimeMillis();
                         //logger.debug("Delta Execution:" + (mainEnd - mainStart) + " ms");
                         automationDao.saveFilterStatus(filter);
@@ -104,6 +153,7 @@ public class ScriptJob extends AutomationJob {
         } else {
             logger.debug("There is no filter in the reader...");
         }
+        logger.removeAppender(myScriptLogger);
     }
-    
+
 }

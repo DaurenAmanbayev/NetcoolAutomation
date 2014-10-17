@@ -14,6 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,6 +40,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AutomationReaderFilter.findByEnabled", query = "SELECT a FROM AutomationReaderFilter a WHERE a.enabled = :enabled"),
     @NamedQuery(name = "AutomationReaderFilter.findByStateChange", query = "SELECT a FROM AutomationReaderFilter a WHERE a.stateChange = :stateChange")})
 public class AutomationReaderFilter implements Serializable {
+
+    @Column(name = "STATE_CHANGE")
+    private Integer stateChange;
+   
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1)
@@ -52,7 +57,8 @@ public class AutomationReaderFilter implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "FILTER_NAME")
     private String filterName;
-    @Size(max = 255)
+    @Lob
+    @Size(max = 65535)
     @Column(name = "FILTER_SQL")
     private String filterSql;
     @Basic(optional = false)
@@ -60,10 +66,6 @@ public class AutomationReaderFilter implements Serializable {
     @Size(min = 1, max = 1)
     @Column(name = "ENABLED")
     private String enabled;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "STATE_CHANGE")
-    private int stateChange;
     @JoinColumn(name = "READER_NAME", referencedColumnName = "READER_NAME")
     @ManyToOne(optional = false)
     @Expose(serialize = false)
@@ -167,5 +169,13 @@ public class AutomationReaderFilter implements Serializable {
     public void setPersistState(String persistState) {
         this.persistState = persistState;
     }
+
+   
+
+    public void setStateChange(Integer stateChange) {
+        this.stateChange = stateChange;
+    }
+
+   
 
 }

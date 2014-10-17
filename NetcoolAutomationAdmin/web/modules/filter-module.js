@@ -4,6 +4,19 @@ FilterIinterface = function () {
             FilterIinterface.loadFilter();
             FilterIinterface.populateCmbReaders();
             FilterIinterface.saveFilter();
+            FilterIinterface.refreshOnClose();
+            FilterIinterface.addlisteners();
+        },
+        addlisteners: function () {
+            $("#add-filter-btn").click(function () {
+                $('#filter-name').removeAttr('disabled');
+                $("#filter-name").val("");
+                $("#reader-cmb").val("");
+                $("#Filer SQL").val("");
+                $("#filter-enabled").prop('checked', false);
+                $("#filter-enabled").prop('value', "N");
+                logger.debug("Done...");
+            });
         },
         populateCmbReaders: function () {
             $.ajax({
@@ -81,6 +94,7 @@ FilterIinterface = function () {
         },
         clickEditButton: function () {
             $(".edit-connection").click(function () {
+                $('#filter-name').attr('disabled', 'disabled');
                 logger.debug("Edit Connection Name: " + $(this).data('reader-name'));
                 var filterName = $(this).data('filter-name');
                 //Popula o form
@@ -133,7 +147,7 @@ FilterIinterface = function () {
                     url: "webresources/restapi/filter/" + filterName + "/update",
                     data: {
                         readerName: readerName,
-                        fiterSql: filterSql,                       
+                        fiterSql: filterSql,
                         enabled: readerEnabled
 
                     },
@@ -150,6 +164,12 @@ FilterIinterface = function () {
 
                 logger.debug("Saving:::  " + readerName + " " + readerEnabled);
             });
+        },
+        refreshOnClose: function () {
+            $('#connection-detail').on('hidden.bs.modal', function () {
+                FilterIinterface.loadFilter();
+            });
+
         }
     };
 }();

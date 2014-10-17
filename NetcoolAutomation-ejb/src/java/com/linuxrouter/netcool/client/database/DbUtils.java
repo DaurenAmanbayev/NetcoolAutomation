@@ -4,7 +4,6 @@
  */
 package com.linuxrouter.netcool.client.database;
 
-
 import com.linuxrouter.database.Configuration;
 import com.linuxrouter.database.query.QueryDb;
 import java.io.File;
@@ -32,7 +31,7 @@ import org.apache.log4j.Logger;
  * @author Lucas
  */
 public class DbUtils {
-
+    
     private static HashMap<String, DBConnectionData> dsPool = new HashMap<String, DBConnectionData>();
     private static Integer maxAtcive = 10;
     private static Integer maxIdle = 5;
@@ -41,14 +40,15 @@ public class DbUtils {
     private static PoolMonitor monitor = null;
     private static Configuration configuration;
     public static DbUtils instance = DbUtils.initDbPool();
-
+    public static Logger logger = Logger.getLogger(DbUtils.class);
+    
     public static DbUtils initDbPool() {
-
+        
         if (instance == null) {
             instance = new DbUtils();
             autoConfigure();
         }
-
+        
         return instance;
     }
 
@@ -65,7 +65,7 @@ public class DbUtils {
      * @param path
      */
     public static void configureDbConnections(String path) {
-
+        
         FilenameFilter filter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -124,7 +124,7 @@ public class DbUtils {
                 ds.setUrl(data.getPool().getJdbcUrl().trim());
                 return ds;
             }
-
+            
         }
         getLogger().error("Connection name: [" + name + "] not found..");
         return null;
@@ -143,6 +143,18 @@ public class DbUtils {
             DBConnectionData data = dsPool.get(connectionName);
             getLogger().debug("\tConnection: [" + connectionName + "]: Active:> " + data.getConnectionPool().getObjectPool().getNumActive() + " Idle:> " + data.getConnectionPool().getObjectPool().getNumIdle());
         }
+    }
+    
+    public static void shutDownDbPool() {
+        Iterator it = dsPool.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry) it.next();
+            String connectionName = (String) pairs.getKey();
+            DBConnectionData data = dsPool.get(connectionName);
+            data.getConnectionPool().objectPool.close();
+            getLogger().debug("\tConnection: [" + connectionName + "]: Active:> " + data.getConnectionPool().getObjectPool().getNumActive() + " Idle:> " + data.getConnectionPool().getObjectPool().getNumIdle());
+        }
+        logger.debug("Db Pool ShutDown xD");
     }
 
     /**
@@ -256,7 +268,7 @@ public class DbUtils {
                 st.execute(sql);
                 st.close();
                 getDsPool().get(pool.getPoolName()).getConnectionPool().getPoolingDataSource().getConnection().close();
-
+                
             } catch (SQLException ex) {
                 getLogger().error(ex); //Loga o erro
                 getLogger().error("Connection: " + pool.getPoolName() + " is invalid.."
@@ -283,7 +295,7 @@ public class DbUtils {
      * @param name
      * @return
      * @throws Exception
-     * @deprecated 
+     * @deprecated
      */
     public static PoolingDataSource getConnection(String name) throws Exception {
         getLogger().debug("Get connectin: [" + name + "]");
@@ -315,21 +327,24 @@ public class DbUtils {
 //        config.maxWait = 5000;
         //ObjectPool connectionPool = new GenericObjectPool(null, config);
         ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(url.trim(), user, password);
-
+        
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
         ObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
         poolableConnectionFactory.setPool(connectionPool);
         PoolingDataSource<PoolableConnection> poolingDataSource = new PoolingDataSource<>(connectionPool);
-
+        
         getLogger().debug("Connection created!");
         con.setObjectPool(connectionPool);
         con.setPoolingDataSource(poolingDataSource);
         return con;
-
+        
     }
-
-    private static Logger getLogger() {
-        return Logger.getLogger(DbUtils.class);
+    
+    public static Logger getLogger() {
+        if (logger == null) {
+            logger = Logger.getLogger(DbUtils.class);
+        }
+        return logger;
     }
 
     /**
@@ -392,10 +407,10 @@ public class DbUtils {
      * Classe interna que monitora o pool
      */
     private static class PoolMonitor implements Runnable {
-
+        
         private final Boolean isRunning = true;
         private final Logger logger = Logger.getLogger("PoolMonitor");
-
+        
         @Override
         public void run() {
             while (isRunning) {
@@ -410,15 +425,15 @@ public class DbUtils {
                     }
                     Thread.sleep(1000 * 60);
                 } catch (InterruptedException ex) {
-
+                    
                 }
             }
         }
-
+        
     }
-
+    
     public static class LinuxRouterPoolConnection {
-
+        
         private PoolingDataSource poolingDataSource;
         private ObjectPool objectPool;
 

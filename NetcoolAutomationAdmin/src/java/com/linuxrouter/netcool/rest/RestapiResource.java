@@ -182,4 +182,19 @@ public class RestapiResource {
             @FormParam("filter") String filter, @FormParam("enabled") String enable) {
         return converter.convert2Json(automationSession.setPolicyFilterAndStatusByName(policeName, filter, enable));
     }
+
+    @GET
+    @Produces("application/json")
+    @Path("plugins/list")
+    public String getAllPlugins() {
+        return converter.convert2Json(automationSession.getAllplugins());
+    }
+
+    @GET
+    @Produces("appplication/json")
+    @Path("plugins/{name}")
+    public String getPluginByName(@PathParam("name") String name) {
+        return converter.convert2Json(automationSession.getPluginByName(name));
+    }
+
 }

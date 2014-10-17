@@ -31,7 +31,7 @@
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Omnibus Connection Settings</h1>
+                        <h1 class="page-header">Plugin Setings</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -40,21 +40,20 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <span>Connection List</span>
-                                <a  data-toggle="modal" data-target="#connection-detail"  id="add-connection-btn"><i class="fa fa-plus pull-right"></i></a>
+                                <span>Plugin List</span>
+                                <a  data-toggle="modal" data-target="#connection-detail"  id="add-plugin-btn"><i class="fa fa-plus pull-right"></i></a>
                             </div>
                             <!-- /.panel-heading -->
                             <div class="panel-body">
                                 <div class="table-responsive">
-                                    <table id="connection-table" class="table table-striped table-bordered table-hover">
+                                    <table id="plugin-table" class="table table-striped table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Connection Name</th>
-                                                <th>URL</th>
-                                                <th>Username</th>
-                                                <th>Status</th>
-                                                <th>Activator Count</th>                                               
+                                                <th>Plugin Name</th>
+                                                <th>Plugin Description</th>
+                                                <th>Class Name</th>
+                                                <th>Enabled</th>                                                
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -86,36 +85,28 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Edit Omnibus Connection</h4>
+                        <h4 class="modal-title" id="myModalLabel">Edit Plugin Settings</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-lg-12">
                                 <form role="form">
-                                  
-                                        <div class="form-group">
-                                            <label>Connection Name</label>
-                                            <input id="connection-name" class="form-control" placeholder="" disabled >                                       
-                                        </div>
-                             
                                     <div class="form-group">
-                                        <label>JDBC URL </label>
-                                        <input id="connection-url"  class="form-control" placeholder="">                                       
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Username</label>
-                                        <input id="connection-user" class="form-control" placeholder="">                                       
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Password</label>
-                                        <input  id="connection-pass" class="form-control" placeholder="">                                       
+                                        <label>Plugin Name</label>
+                                        <input id="plugin-name" class="form-control" placeholder="" disabled>                                       
                                     </div>
 
+                                    <div class="form-group">
+                                        <label>Plugin Class</label>
+                                        <input id="plugin-class" class="form-control" placeholder="" >        
+                                    </div>
+
+                                   
                                     <div class="form-group">
                                         <label>Status</label>
                                         <div class="checkbox">
                                             <label>
-                                                <input id="connection-enabled" type="checkbox" value="">Enabled
+                                                <input id="plugin-enabled" type="checkbox" value="">Enabled
                                             </label>
                                         </div>                                        
                                     </div>
@@ -132,7 +123,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button id="save-connection-data" type="button" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+                        <button id="save-filter-data" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -144,7 +135,7 @@
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <!-- Custom Theme JavaScript -->
-        <script src="modules/connection-module.js"></script>
+        <script src="modules/plugins-module.js"></script> 
 
     </body>
 

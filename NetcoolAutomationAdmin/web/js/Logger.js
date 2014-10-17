@@ -16,3 +16,18 @@ logger = function() {
     };
 }();
 
+var loc = window.location, new_uri;
+if (loc.protocol === "https:") {
+    new_uri = "wss:";
+} else {
+    new_uri = "ws:";
+}
+new_uri += "//" + loc.host;
+new_uri += "/NetcoolAutomationAdmin/loggerSocket";
+var webLogger = new WebSocket(new_uri);
+
+function logMsg(msg){
+    console.debug(msg.data);
+}
+webLogger.onmessage = logMsg;
+

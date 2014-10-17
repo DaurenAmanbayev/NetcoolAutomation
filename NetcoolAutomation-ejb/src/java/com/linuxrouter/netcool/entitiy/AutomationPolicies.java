@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "AUTOMATION_POLICIES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AutomationPolicies.findAll", query = "SELECT a FROM AutomationPolicies a"),
+    @NamedQuery(name = "AutomationPolicies.findAll", query = "SELECT a FROM AutomationPolicies a order by a.executionOrder ASC"),
     @NamedQuery(name = "AutomationPolicies.findByPolicyName", query = "SELECT a FROM AutomationPolicies a WHERE a.policyName = :policyName"),
     @NamedQuery(name = "AutomationPolicies.findByEnabled", query = "SELECT a FROM AutomationPolicies a WHERE a.enabled = :enabled"),
     @NamedQuery(name = "AutomationPolicies.findByExecutionOrder", query = "SELECT a FROM AutomationPolicies a WHERE a.executionOrder = :executionOrder"),

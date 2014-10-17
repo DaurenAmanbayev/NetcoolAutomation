@@ -5,7 +5,18 @@ ReaderInterface = function () {
             ReaderInterface.populateCmbConnections();
             ReaderInterface.saveConnection();
             ReaderInterface.refreshOnClose();
+            ReaderInterface.addlisteners();
 
+        },
+        addlisteners: function () {
+            $("#add-reader-btn").click(function () {
+                $('#reader-name').removeAttr('disabled');
+                $("#reader-name").val("");
+                $("#connection-cmb").val("");
+                $("#reader-cron").val("");                
+                $("#reader-enabled").prop('checked', false);
+                $("#reader-enabled").prop('value', "N");
+            });
         },
         populateCmbConnections: function () {
             $.ajax({
@@ -72,7 +83,9 @@ ReaderInterface = function () {
             });
         },
         clickEditButton: function () {
+            $('#reader-name').attr('disabled', 'disabled');
             $(".edit-connection").click(function () {
+                
                 logger.debug("Edit Connection Name: " + $(this).data('reader-name'));
                 var readerName = $(this).data('reader-name');
                 //Popula o form

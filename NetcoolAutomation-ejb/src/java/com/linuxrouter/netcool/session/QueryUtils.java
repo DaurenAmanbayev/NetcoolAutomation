@@ -30,6 +30,9 @@ public class QueryUtils {
     private final Logger logger = Logger.getLogger(QueryUtils.class);
     private HashMap<String, Connection> connectionMap = new HashMap<>();
 
+    
+   
+    
     public ArrayList<HashMap<String, Object>> executeQuery(String dbName, String sql) {
         Long start = System.currentTimeMillis();
         ArrayList<HashMap<String, Object>> result = new ArrayList<>();

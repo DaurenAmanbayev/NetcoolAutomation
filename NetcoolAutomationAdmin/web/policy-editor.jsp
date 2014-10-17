@@ -24,7 +24,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html">Netcool Automation</a>
+                    <a class="navbar-brand" href="#">Netcool Automation</a>
                 </div>
                 <!-- /.navbar-header -->
                 <%@include file="includes/drop-down.jsp" %>

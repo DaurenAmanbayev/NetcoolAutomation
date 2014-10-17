@@ -33,12 +33,14 @@ public class EventMap extends ObservableMap implements PropertyChangeListener {
         //System.out.println("Marking Event Changed for Identifier: " + this.get("Identifier"));
         HashMap<String, Object> data = new HashMap<>();
         data.put(evt.getPropertyName(), evt.getNewValue());
-        if (changedEvents.get(this.get("Serial")) != null) {
-            changedEvents.get(this.get("Serial")).add(data);
-        } else {
-            ArrayList<HashMap<String, Object>> lists = new ArrayList<>();
-            lists.add(data);
-            changedEvents.put(this.get("Serial").toString(), lists);
+        if (changedEvents != null) {
+            if (changedEvents.get(this.get("Serial")) != null) {
+                changedEvents.get(this.get("Serial")).add(data);
+            } else {
+                ArrayList<HashMap<String, Object>> lists = new ArrayList<>();
+                lists.add(data);
+                changedEvents.put(this.get("Serial").toString(), lists);
+            }
         }
     }
 

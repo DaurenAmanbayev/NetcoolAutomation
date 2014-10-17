@@ -18,7 +18,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html">Netcool Automation</a>
+                    <a class="navbar-brand" href="#">Netcool Automation</a>
                 </div>
                 <!-- /.navbar-header -->
                 <%@include file="includes/drop-down.jsp" %>
@@ -40,7 +40,8 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Connection List
+                                <span>Filter List</span>
+                                <a  data-toggle="modal" data-target="#connection-detail"  id="add-filter-btn"><i class="fa fa-plus pull-right"></i></a>
                             </div>
                             <!-- /.panel-heading -->
                             <div class="panel-body">
@@ -50,8 +51,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Filter Name</th>
-                                                <th>Reader Name</th>
-
+                                                <th>Activator Name</th>
                                                 <th>Filter SQL</th>
                                                 <th>Enabled</th>
                                                 <th>Action</th>
@@ -91,13 +91,13 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <form role="form">
-                                    <fieldset disabled>
 
-                                        <div class="form-group">
-                                            <label>Filter Name</label>
-                                            <input id="filter-name" class="form-control" placeholder="">                                       
-                                        </div>
-                                    </fieldset>
+
+                                    <div class="form-group">
+                                        <label>Filter Name</label>
+                                        <input id="filter-name" class="form-control" placeholder="" disabled>                                       
+                                    </div>
+
                                     <div class="form-group">
                                         <label>Reader</label>
                                         <select id="reader-cmb" class="form-control">                                           
@@ -130,7 +130,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button id="save-filter-data" type="button" class="btn btn-primary">Save changes</button>
+                        <button id="save-filter-data" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->

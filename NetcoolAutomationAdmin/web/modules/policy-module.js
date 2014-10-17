@@ -4,7 +4,7 @@ PolicyListInterface = function () {
             logger.debug("Starting Policy Interface");
             PolicyListInterface.loadPolicyList();
             logger.debug("loadgin cmb");
-            
+
         },
         loadPolicyList: function () {
             $.ajax({
@@ -17,9 +17,10 @@ PolicyListInterface = function () {
                         var policies = response.payLoad;
                         var html = '';
                         for (x in policies) {
-                            var policyName = policies[x].policyName;
-                            var filterName = policies[x].filterName.filterName;
+                            var policyName =    policies[x].policyName;
+                            var filterName =    policies[x].filterName.filterName;
                             var policyEnabled = policies[x].enabled;
+                            var policyOrder =   policies[x].executionOrder;
                             var enabledFlag = "";
                             if (policyEnabled == "Y") {
                                 enabledFlag = '<button type="button" class="btn btn-success btn-circle"><i class="fa fa-check"></i></button>';
@@ -33,6 +34,7 @@ PolicyListInterface = function () {
                             html += ' <td>' + policyName + '</td>';
                             html += ' <td>' + filterName + '</td>';
                             html += ' <td>' + enabledFlag + '</td>';
+                            html += ' <td>' + policyOrder + '</td>';
                             html += ' <td> <button type="button" class="btn btn-primary edit-connection" data-toggle="modal" data-target="#connection-detail" data-policy-name= "' + policyName + '">Edit</button></td>';
                             html += '</tr>';
                         }

@@ -47,6 +47,7 @@
     <category name="com.linuxrouter.netcool.client.OmniClient" additivity="false">  
         <priority value="debug" />  
         <appender-ref ref="OmniClient"/>
+        <appender-ref ref="stdout"/>
     </category>  
     
     <root>        

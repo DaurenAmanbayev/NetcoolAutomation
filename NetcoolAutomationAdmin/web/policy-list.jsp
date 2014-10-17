@@ -22,7 +22,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html">Netcool Automation</a>
+                    <a class="navbar-brand" href="#">Netcool Automation</a>
                 </div>
                 <!-- /.navbar-header -->
                 <%@include file="includes/drop-down.jsp" %>
@@ -36,7 +36,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <!-- /<h1 class="page-header">Netcool Automation Policy Editor - POC</h1> -->
-                        <h1 class="page-header"> </h1>
+                        <h1 class="page-header"> Police List </h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -57,6 +57,7 @@
                                                 <th>Policy Name</th>
                                                 <th>Filter</th>
                                                 <th>Status</th>                                               
+                                                <th>Order</th>                                               
                                                 <th>Action</th>
                                             </tr>
                                         </thead>

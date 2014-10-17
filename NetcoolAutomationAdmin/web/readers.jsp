@@ -18,7 +18,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html">Netcool Automation</a>
+                    <a class="navbar-brand" href="#">Netcool Automation</a>
                 </div>
                 <!-- /.navbar-header -->
                 <%@include file="includes/drop-down.jsp" %>
@@ -31,7 +31,7 @@
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Reader Setings</h1>
+                        <h1 class="page-header">Activators Setings</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -40,7 +40,8 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Connection List
+                                <span>Activators List</span>
+                                <a  data-toggle="modal" data-target="#connection-detail"  id="add-reader-btn"><i class="fa fa-plus pull-right"></i></a>
                             </div>
                             <!-- /.panel-heading -->
                             <div class="panel-body">
@@ -49,8 +50,8 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Reader Name</th>
-                                                <th>Reader Connection</th>
+                                                <th>Activator Name</th>
+                                                <th>Activator Connection</th>
                                                 <th>Cron String</th>
                                                 <th>Status</th>
                                                 <th>Filter Count</th>
@@ -91,13 +92,13 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <form role="form">
-                                    <fieldset disabled>
 
-                                        <div class="form-group">
-                                            <label>Reader Name</label>
-                                            <input id="reader-name" class="form-control" placeholder="">                                       
-                                        </div>
-                                    </fieldset>
+
+                                    <div class="form-group">
+                                        <label>Activator Name</label>
+                                        <input id="reader-name" class="form-control" placeholder="" disabled>                                       
+                                    </div>
+
                                     <div class="form-group">
                                         <label>Omnibus Connection</label>
                                         <select id="connection-cmb" class="form-control">                                           
@@ -130,7 +131,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button id="save-reader-data" type="button" class="btn btn-primary">Save changes</button>
+                        <button id="save-reader-data" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->

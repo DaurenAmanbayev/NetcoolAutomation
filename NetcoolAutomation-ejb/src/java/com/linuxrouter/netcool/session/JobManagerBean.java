@@ -6,6 +6,7 @@
 package com.linuxrouter.netcool.session;
 
 import com.linuxrouter.netcool.client.OmniClient;
+import com.linuxrouter.netcool.client.database.DbUtils;
 import com.linuxrouter.netcool.configuration.AutomationConstants;
 import com.linuxrouter.netcool.dao.AutomationDao;
 import com.linuxrouter.netcool.entitiy.AutomationReader;
@@ -43,13 +44,20 @@ public class JobManagerBean {
 
     @EJB
     private QueryUtils queryUtils;
-    
+
+    @EJB
+    private LoggerSocket loggerSocket;
+
+    @EJB
+    private PluginManager pluginManager;
+
     private HashMap<String, JobKey> jobMap = new HashMap<>();
 
     @PostConstruct
     private void startDefaultJob() {
         JobManager.init();
         startEnabledJobs();
+        pluginManager.registerEnabledPlugins();
 
     }
 
@@ -61,6 +69,9 @@ public class JobManagerBean {
             stopReader(reader);
         }
         JobManager.shutDown();
+        DbUtils.shutDownDbPool();
+
+        //Logger.getRootLogger().removeAllAppenders();
     }
 
     public void startEnabledJobs() {
@@ -90,6 +101,8 @@ public class JobManagerBean {
         map.put(AutomationConstants.OMNICLIENT, omniclient);
         map.put(AutomationConstants.QUERY_UTILS, queryUtils);
         map.put(AutomationConstants.AUTOMATIONDAO, automationDao);
+        map.put(AutomationConstants.WEBSOCKET_LOGGER, loggerSocket);
+        map.put(AutomationConstants.PLUGIN_MANAGER, pluginManager);
         JobDetail det = JobManager.commitNewJob(reader.getReaderName(), reader.getCronInterval(), ScriptJob.class, map);
         jobMap.put(reader.getReaderName(), det.getKey());
     }
@@ -102,7 +115,6 @@ public class JobManagerBean {
     }
 
     public void updateReader(AutomationReader reader) {
-
         this.stopReader(reader); // Remove
         if (reader.getEnabled().equalsIgnoreCase("Y")) {
             if (reader.getConnectionName().getEnabled().equalsIgnoreCase("Y")) {

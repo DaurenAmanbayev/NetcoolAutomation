@@ -23,4 +23,6 @@ public class AutomationConstants {
     public static final String AUTOMATIONDAO = "automationada";
     public static final String AUTOMATIONNAME = "NISHI-IMPACT-AUTOMATION";
     public static final String QUERY_UTILS = "queryUtils";
+    public static final String WEBSOCKET_LOGGER = "WEBLOGER";
+    public static final String PLUGIN_MANAGER = "pluginmanager";
 }
