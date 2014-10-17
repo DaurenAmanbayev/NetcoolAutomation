@@ -101,6 +101,9 @@ I still didnt decide the best aproach to implement the local storage.
 Im sorry for my terrible english today, Im tired.
 
 
+**17/10/2014**: This version is in production for testing. I started to write the bootrap for the embedded glassfish server.
+
+
 
 ## Target Features
 * SnmpGetRequest for simple host,community,oid
