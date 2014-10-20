@@ -70,7 +70,7 @@ public class ScriptJob extends AutomationJob {
                         try {
 
                             for (AutomationPolicies p : filter.getAutomationPoliciesList()) {
-
+                                automationDao.detach(filter); //detach
                                 Logger policyLogger = Logger.getLogger(AutomationPolicies.class);
 
                                 String pattern = "[%5p] %d{dd-MMM-yyyy HH:mm:ss} (Reader:" + this.policyName + " Policy:" + p.getPolicyName() + ") - %m";
@@ -78,14 +78,13 @@ public class ScriptJob extends AutomationJob {
                                 appender.setLayout(new PatternLayout(pattern));
                                 policyLogger.addAppender(appender);
                                 Binding binding = new Binding();
-                                
+
                                 binding.setVariable("q", queryUtils);
                                 binding.setVariable("events", events);
                                 binding.setVariable("logger", policyLogger);
                                 binding.setVariable("filterName", filter.getFilterName());
                                 binding.setVariable("omniSql", omniClient);
 
-                                
                                 binding.setVariable("plugins", pluginManager.getPluginsImpl());
 //                                if (plugins != null) {
 //                                    
@@ -133,11 +132,12 @@ public class ScriptJob extends AutomationJob {
                             omniClient.commitChangedEvents(changedEvents, reader);
                         }
 
-                        filter.setStateChange(stateChanged);
                         //automationDao.saveReaderStatus(reader);
-
                         Long mainEnd = System.currentTimeMillis();
                         //logger.debug("Delta Execution:" + (mainEnd - mainStart) + " ms");
+
+                        filter = automationDao.getFilterByName(filter.getFilterName());
+                        filter.setStateChange(stateChanged);
                         automationDao.saveFilterStatus(filter);
                     } else {
                         //automationDao.saveReaderStatus(reader);

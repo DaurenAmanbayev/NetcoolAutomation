@@ -15,6 +15,8 @@ import com.linuxrouter.netcool.entitiy.DbConnections;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -24,10 +26,11 @@ import org.apache.log4j.Logger;
  *
  * @author lucas
  */
-@Stateless
+@Singleton
 @LocalBean
+@Startup
 public class AutomationDao {
-
+    
     private final Logger logger = Logger.getLogger(AutomationDao.class);
     @PersistenceContext(name = "NetcoolAutomation-ejbPU")
     private EntityManager em;
@@ -59,7 +62,7 @@ public class AutomationDao {
     public void saveUser(AutomationUsers user) {
         em.persist(user);
     }
-
+    
     public List<AutomationReader> getEnabledReaders() {
         Query q = em.createNamedQuery("AutomationReader.findByEnabled");
         q.setParameter("enabled", "Y");
@@ -70,9 +73,9 @@ public class AutomationDao {
         } catch (Exception ex) {
         }
         return list;
-
+        
     }
-
+    
     public List<AutomationReader> getAllReaders() {
         Query q = em.createNamedQuery("AutomationReader.findAll");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -82,9 +85,9 @@ public class AutomationDao {
         } catch (Exception ex) {
         }
         return list;
-
+        
     }
-
+    
     public List<AutomationConnection> getEnabledConections() {
         Query q = em.createNamedQuery("AutomationConnection.findByEnabled");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -96,7 +99,7 @@ public class AutomationDao {
             return null;
         }
     }
-
+    
     public List<AutomationConnection> getDisabledConnection() {
         Query q = em.createNamedQuery("AutomationConnection.findByEnabled");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -108,11 +111,11 @@ public class AutomationDao {
             return null;
         }
     }
-
+    
     public List<AutomationConnection> getAllConnections() {
         Query q = em.createNamedQuery("AutomationConnection.findAll");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
-
+        
         try {
             List<AutomationConnection> list = q.getResultList();
             return list;
@@ -120,7 +123,7 @@ public class AutomationDao {
             return null;
         }
     }
-
+    
     public AutomationPolicies getPolicyByName(String name) {
         Query q = em.createNamedQuery("AutomationPolicies.findByPolicyName");
         q.setParameter("policyName", name);
@@ -131,9 +134,9 @@ public class AutomationDao {
         } catch (Exception ex) {
             return null;
         }
-
+        
     }
-
+    
     public AutomationReader getReaderByName(String readerName) {
         Query q = em.createNamedQuery("AutomationReader.findByReaderName");
         q.setParameter("readerName", readerName);
@@ -145,31 +148,35 @@ public class AutomationDao {
             return null;
         }
     }
-
+    
     public void updatePolicy(AutomationPolicies pol) {
         em.merge(pol);
     }
-
+    
     public void saveReaderStatus(AutomationReader reader) {
         em.merge(reader);
     }
-
-    public void saveFilterStatus(AutomationReaderFilter filter) {
+    
+    public void saveFilterStatus(AutomationReaderFilter filter) {        
         em.merge(filter);
     }
-
+    
+    public void detach(AutomationReaderFilter filter) {
+        em.detach(filter);        
+    }
+    
     public void saveConnection(AutomationConnection connection) {
         logger.debug("Before");
         em.merge(connection);
         logger.debug("Merged..");
     }
-
+    
     public void saveData(Object connection) {
         logger.debug("Before");
         em.persist(connection);
         logger.debug("Merged..");
     }
-
+    
     public AutomationConnection getConnectionByName(String connectionName) {
         Query q = em.createNamedQuery("AutomationConnection.findByConnectionName");
         q.setParameter("connectionName", connectionName);
@@ -181,7 +188,7 @@ public class AutomationDao {
             return null;
         }
     }
-
+    
     public List<AutomationReaderFilter> getAllFilters() {
         Query q = em.createNamedQuery("AutomationReaderFilter.findAll");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -192,7 +199,7 @@ public class AutomationDao {
         }
         return list;
     }
-
+    
     public AutomationReaderFilter getFilterByName(String filterName) {
         Query q = em.createNamedQuery("AutomationReaderFilter.findByFilterName");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -204,21 +211,21 @@ public class AutomationDao {
             return null;
         }
     }
-
+    
     public List<AutomationPolicies> getAllPolicies() {
         Query q = em.createNamedQuery("AutomationPolicies.findAll");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
         List<AutomationPolicies> policies = q.getResultList();
         return policies;
     }
-
+    
     public List<DbConnections> getAllDbConnections() {
         Query q = em.createNamedQuery("DbConnections.findAll");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
         List<DbConnections> connections = q.getResultList();
         return connections;
     }
-
+    
     public List<AutomationPlugins> getEnabledPlugins() {
         Query q = em.createNamedQuery("AutomationPlugins.findByEnabled");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -226,7 +233,7 @@ public class AutomationDao {
         List<AutomationPlugins> plugins = q.getResultList();
         return plugins;
     }
-
+    
     public List<AutomationPlugins> getAllPlugins() {
         Query q = em.createNamedQuery("AutomationPlugins.findAll");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -238,19 +245,19 @@ public class AutomationDao {
             return null;
         }
     }
-
+    
     public AutomationPlugins getPluginByName(String pluginName) {
         Query q = em.createNamedQuery("AutomationPlugins.findByPluginName");
         q.setHint("javax.persistence.cache.storeMode", "REFRESH");
         try {
             q.setParameter("pluginName", pluginName);
             AutomationPlugins plugin = (AutomationPlugins) q.getSingleResult();
-
+            
             return plugin;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
     }
-
+    
 }
