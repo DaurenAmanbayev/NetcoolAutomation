@@ -1,2 +1,2 @@
 language: java
-script: ant dist
+script: ant -Dlibs.CopyLibs.classpath=libs/org-netbeans-modules-java-j2seproject-copylibstask.jar dist
