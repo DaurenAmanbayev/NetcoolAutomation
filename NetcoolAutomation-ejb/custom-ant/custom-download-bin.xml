@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="downloadlibs" default="all" basedir=".">
     <target name="checkLibs">    
-        <available file="${basedir}/libs2" property="automation.libs.present"/>       
+        <available file="${basedir}/libs2" property="automation.libs.present"/>  
+        <echo message="Starting Custom For Lib Download ${basedir}"/>     
     </target> 
     
     <target name="download_libs" depends="checkLibs" unless="automation.libs.present">
