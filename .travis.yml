@@ -1,5 +1,7 @@
 language: java
 before_script:
-	wget http://download.java.net/glassfish/4.0/release/glassfish-4.0.zip -O nishisan/gf.zip
-	unzip nishisan/gf.zip
-script: ant -Dlibs.CopyLibs.classpath=libs/org-netbeans-modules-java-j2seproject-copylibstask.jar dist
+	- wget http://download.java.net/glassfish/4.0/release/glassfish-4.0.zip -O nishisan/gf.zip
+	- cd nishisan
+	- unzip gf.zip	
+	- cd ..	
+script: ant -Dlibs.CopyLibs.classpath=libs/org-netbeans-modules-java-j2seproject-copylibstask.jar  -Dj2ee.server.home=../glassfish4/glassfish dist
