@@ -6,5 +6,5 @@ before_script:
  - cd libs
  - wget https://jaxb.java.net/2.2.11/jaxb-ri-2.2.11.zip
  - unzip jaxb-ri-2.2.11.zip
-
+ - cd ..
 script: ant  -lib $BUILD_HOME/libs/jaxb-ri/lib -Dlibs.CopyLibs.classpath=libs/org-netbeans-modules-java-j2seproject-copylibstask.jar  -Dj2ee.server.home=$BUILD_HOME/glassfish4/glassfish dist
