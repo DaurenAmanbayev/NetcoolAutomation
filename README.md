@@ -1,3 +1,6 @@
+
+![alt tag](https://travis-ci.org/nishisan/NetcoolAutomation.svg?branch=dev)
+
 ## Introduction
 NetcoolAutomation is my atempt to create a better integration with a dynamic script enviroment, groovy in this case, with
 IBM Netcool.
