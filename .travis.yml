@@ -1,5 +1,10 @@
 language: java
 before_script:
+ - BUILD_HOME=$(pwd)
  - wget http://download.java.net/glassfish/4.0/release/glassfish-4.0.zip 
  - unzip glassfish-4.0.zip 
-script: ant -Dlibs.CopyLibs.classpath=libs/org-netbeans-modules-java-j2seproject-copylibstask.jar  -Dj2ee.server.home=glassfish4/glassfish dist
+ - cd libs
+ - wget https://jaxb.java.net/2.2.11/jaxb-ri-2.2.11.zip
+ - unzip jaxb-ri-2.2.11.zip
+
+script: ant  -lib $BUILD_HOME/libs/jaxb-ri/lib -Dlibs.CopyLibs.classpath=libs/org-netbeans-modules-java-j2seproject-copylibstask.jar  -Dj2ee.server.home=$BUILD_HOME/glassfish4/glassfish dist
